@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elementi di Diritto Costituzionale</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN (not used but kept as per original) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e0e7ff; /* blu indaco chiaro */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Custom Scrollbar for Webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f0f4ff; /* blu indaco molto chiaro */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #a7b5ff; /* A lighter shade of blue */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8e9bff; /* Even lighter on hover */
+        }
+
+        .header-top {
+            background-color: #2a3b7a; /* blu scuro */
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header {
+            background-color: #3f51b5; /* blu indaco */
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .sidebar-nav {
+            width: 280px;
+            background-color: #2a3b7a; /* blu scuro */
+            color: white;
+            padding: 1.5rem 1rem;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease-in-out;
+            z-index: 30;
+            transform: translateX(0);
+        }
+
+        .sidebar-nav.hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav ul li a {
+            display: block;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            font-weight: 500;
+        }
+
+        .sidebar-nav ul li a:hover {
+            background-color: #3f51b5; /* blu indaco */
+            transform: translateY(-2px);
+        }
+
+        .sidebar-nav ul li a.active {
+            background-color: #3f51b5; /* blu indaco */
+            border-left: 5px solid #a7b5ff; /* A lighter shade for active state */
+            padding-left: 0.75rem;
+        }
+
+        #main-content-wrapper {
+            margin-left: 280px;
+            transition: margin-left 0.3s ease-in-out;
+            flex-grow: 1;
+            padding: 1rem;
+        }
+
+        #main-content-wrapper.full-width {
+            margin-left: 0;
+        }
+
+        .section-card {
+            background-color: #ffffff; /* bianco */
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            padding: 2rem;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            color: #3f51b5; /* blu indaco più scuro */
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: #4b5563; /* grigio scuro */
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-text-summary {
+            font-size: 1.125rem;
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .section-focus {
+            background-color: #f0f4ff; /* blu indaco molto chiaro */
+            border-left: 5px solid #3f51b5;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #374151;
+        }
+
+        .section-focus strong {
+            color: #2a3b7a;
+        }
+
+        .chart-container {
+            background-color: #f0f4ff; /* blu indaco molto chiaro */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            margin-top: 2rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .quiz-container {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+            padding: 2rem;
+        }
+
+        .quiz-question {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #3f51b5;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options label {
+            display: block;
+            padding: 0.75rem 1rem;
+            background-color: #f0f4ff;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .quiz-options label:hover {
+            background-color: #e0e7ff;
+            transform: translateY(-2px);
+        }
+
+        .quiz-options input[type="radio"] {
+            margin-right: 0.75rem;
+            accent-color: #3f51b5;
+        }
+
+        .quiz-options label.correct {
+            background-color: #d1fae5; /* green-100 */
+            border: 1px solid #34d399; /* green-400 */
+        }
+
+        .quiz-options label.incorrect {
+            background-color: #fee2e2; /* red-100 */
+            border: 1px solid #ef4444; /* red-500 */
+        }
+
+        .quiz-navigation button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .quiz-navigation button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        footer {
+            background-color: #2a3b7a; /* blu scuro */
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: auto;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar-nav {
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                transform: translateX(-100%);
+                padding-top: 5rem; /* Space for header */
+            }
+
+            .sidebar-nav.hidden {
+                transform: translateX(-100%);
+            }
+
+            .sidebar-nav.visible {
+                transform: translateX(0%);
+            }
+
+            #main-content-wrapper {
+                margin-left: 0;
+                padding-top: 5rem; /* Space for header */
+            }
+
+            #main-content-wrapper.full-width {
+                margin-left: 0;
+            }
+
+            .header-top {
+                position: fixed;
+                width: 100%;
+                top: 0;
+                left: 0;
+                z-index: 40;
+                padding: 1rem;
+            }
+
+            .main-header {
+                padding: 1rem;
+                font-size: 1.5rem;
+                position: static; /* Remove sticky on mobile for better scroll */
+            }
+
+            #sidebar-toggle {
+                display: block;
+                background-color: #3f51b5;
+                color: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                font-size: 1rem;
+                font-weight: 600;
+                transition: background-color 0.2s ease;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header-top">
+        
+        <button id="sidebar-toggle" class="md:hidden bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out">
+            ☰ Mostra Indice
+        </button>
+    </header>
+
+    <aside class="sidebar-nav hidden md:block" id="sidebar">
+        <h2 class="text-xl font-semibold mb-4 text-center">Indice della Presentazione</h2>
+        <ul>
+            <li><a href="#slide-1">1. Titolo</a></li>
+            <li><a href="#slide-2">2. Introduzione</a></li>
+            <li><a href="#slide-3">3. Definizione</a></li>
+            <li><a href="#slide-4">4. Oggetto</a></li>
+            <li><a href="#slide-5">5. Fonti del Diritto Costituzionale</a></li>
+            <li><a href="#slide-6">6. Rigidità Costituzionale</a></li>
+            <li><a href="#slide-7">7. Concetto di Stato</a></li>
+            <li><a href="#slide-8">8. Forme di Stato (I)</a></li>
+            <li><a href="#slide-9">9. Forme di Stato (II)</a></li>
+            <li><a href="#slide-10">10. Forme di Governo (I)</a></li>
+            <li><a href="#slide-11">11. Forme di Governo (II)</a></li>
+            <li><a href="#slide-12">12. Forme di Governo (III)</a></li>
+            <li><a href="#slide-13">13. La Sovranità Popolare</a></li>
+            <li><a href="#slide-14">14. Democrazia Rappresentativa</a></li>
+            <li><a href="#slide-15">15. Democrazia Diretta</a></li>
+            <li><a href="#slide-16">16. I Diritti Fondamentali (I)</a></li>
+            <li><a href="#slide-17">17. I Diritti Fondamentali (II)</a></li>
+            <li><a href="#slide-18">18. Libertà di Espressione</a></li>
+            <li><a href="#slide-19">19. Libertà di Associazione e Riunione</a></li>
+            <li><a href="#slide-20">20. I Diritti Sociali (I)</a></li>
+            <li><a href="#slide-21">21. I Diritti Sociali (II)</a></li>
+            <li><a href="#slide-22">22. Doveri Costituzionali</a></li>
+            <li><a href="#slide-23">23. Il Parlamento (I)</a></li>
+            <li><a href="#slide-24">24. Il Parlamento (II)</a></li>
+            <li><a href="#slide-25">25. Il Governo (I)</a></li>
+            <li><a href="#slide-26">26. Il Governo (II)</a></li>
+            <li><a href="#slide-27">27. Il Presidente della Repubblica (I)</a></li>
+            <li><a href="#slide-28">28. Il Presidente della Repubblica (II)</a></li>
+            <li><a href="#slide-29">29. La Magistratura (I)</a></li>
+            <li><a href="#slide-30">30. La Magistratura (II)</a></li>
+            <li><a href="#slide-31">31. La Corte Costituzionale (I)</a></li>
+            <li><a href="#slide-32">32. La Corte Costituzionale (II)</a></li>
+            <li><a href="#slide-33">33. Il Giudizio di Legittimità Costituzionale</a></li>
+            <li><a href="#slide-34">34. Gli Enti Territoriali (I)</a></li>
+            <li><a href="#slide-35">35. Gli Enti Territoriali (II)</a></li>
+            <li><a href="#slide-36">36. Revisione Costituzionale</a></li>
+            <li><a href="#slide-37">37. Diritto Internazionale e Costituzionale</a></li>
+            <li><a href="#slide-38">38. Diritto dell'Unione Europea e Costituzionale</a></li>
+            <li><a href="#slide-39">39. La Laicità dello Stato</a></li>
+            <li><a href="#slide-40">40. Il Principio di Uguaglianza</a></li>
+            <li><a href="#slide-41">41. Il Principio Lavorista</a></li>
+            <li><a href="#slide-42">42. La Tutela dell'Ambiente</a></li>
+            <li><a href="#slide-43">43. L'Equilibrio di Bilancio</a></li>
+            <li><a href="#slide-44">44. Emergenze Costituzionali</a></li>
+            <li><a href="#slide-45">45. Diritto Costituzionale Comparato</a></li>
+            <li><a href="#slide-46">46. Giustizia Costituzionale Comparata</a></li>
+            <li><a href="#slide-47">47. Prospettive Future</a></li>
+            <li><a href="#slide-48">48. Costituzione e Nuove Tecnologie</a></li>
+            <li><a href="#slide-49">49. La Costituzione "Vivente"</a></li>
+            <li><a href="#slide-50">50. Ruolo dello Studioso di Diritto Costituzionale</a></li>
+            <li><a href="#slide-51">51. Conclusioni e Dibattito</a></li>
+            <li><a href="#quiz-section">Quiz di Verifica</a></li>
+        </ul>
+    </aside>
+
+    <div class="main-header">
+        <h1 class="text-4xl font-extrabold mb-2">Elementi di Diritto Costituzionale</h1>
+        <p class="text-xl font-medium">Dalle Fondamenta alle Frontiere Giuridiche</p>
+ <span class="text-right">a cura di: Alessandro Azzola - 2025</span>
+    </div>
+
+      <main id="main-content-wrapper" class="flex flex-col min-h-screen">
+        <div class="p-8 flex-grow">
+            <!-- Slide 1: Titolo -->
+            <section id="slide-1" class="section-card">
+                <h2 class="section-title">1. Titolo</h2>
+                <h3 class="section-subtitle">Elementi di Diritto Costituzionale</h3>
+                <p class="section-text-summary">Un'introduzione approfondita ai principi e alle strutture che definiscono l'ordinamento costituzionale, con un focus sull'evoluzione e le sfide contemporanee.</p>
+                <div class="section-focus">
+                    <p><strong>Cari studenti, questo corso non si limiterà a un'arida ricognizione delle norme costituzionali. Il nostro obiettivo è ben più ambizioso: vogliamo esplorare la "logica" sottostante al diritto costituzionale, comprenderne la genesi storica, le implicazioni filosofiche e le dinamiche politiche che ne plasmano l'evoluzione. Analizzeremo il diritto costituzionale non come un monolite statico, ma come un sistema dinamico, in costante dialogo con gli altri rami del diritto (pubblico, privato, internazionale) e, soprattutto, in perenne confronto con le trasformazioni sociali, tecnologiche ed economiche. Ci interrogheremo sulle "frontiere" del costituzionalismo, dalle sfide della globalizzazione ai diritti digitali, dall'intelligenza artificiale alla crisi climatica, cercando di comprendere come la nostra Costituzione possa continuare a essere un faro in un mondo in rapida evoluzione.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 2: Introduzione -->
+            <section id="slide-2" class="section-card">
+                <h2 class="section-title">2. Introduzione</h2>
+                <h3 class="section-subtitle">L'importanza del Diritto Costituzionale</h3>
+                <p class="section-text-summary">Il diritto costituzionale come fondamento di ogni ordinamento giuridico, garante delle libertà e regolatore dei poteri.</p>
+                <div class="section-focus">
+                    <p><strong>Perché il diritto costituzionale è così cruciale? Perché esso rappresenta la "Carta fondamentale" di ogni comunità politica organizzata. Non è una semplice raccolta di precetti legali, ma il progetto politico e sociale di una nazione, l'espressione dei suoi valori fondanti e delle sue aspirazioni più profonde. Senza una Costituzione, non può esservi uno Stato di diritto, ma solo l'arbitrio del potere. Essa definisce i limiti dell'autorità statale, garantisce i diritti inviolabili dell'individuo e stabilisce le regole del gioco democratico. Pensate al preambolo della Costituzione italiana: "L'Italia è una Repubblica democratica, fondata sul lavoro." Qui, in poche parole, è racchiusa la visione di uno Stato che si vuole democratico, sociale e che riconosce nel lavoro il valore fondante della dignità umana e della partecipazione civica. Questa è la cifra di un diritto costituzionale che è al contempo norma e ideale.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 3: Definizione -->
+            <section id="slide-3" class="section-card">
+                <h2 class="section-title">3. Definizione</h2>
+                <h3 class="section-subtitle">Cos'è il Diritto Costituzionale?</h3>
+                <p class="section-text-summary">La branca del diritto pubblico che studia le norme fondamentali sull'organizzazione dello Stato e sui rapporti tra Stato e cittadini.</p>
+                <div class="section-focus">
+                    <p><strong>Il diritto costituzionale è, in essenza, la grammatica e la sintassi dell'ordinamento giuridico. Esso si occupa non solo di come il potere è organizzato, ma, e questo è il suo tratto distintivo, di come il potere è <strong>limitato</strong>. Storicamente, il costituzionalismo è nato proprio come tecnica di limitazione del potere per la tutela della libertà. È la disciplina che indaga il rapporto dialettico tra potere e libertà, tra autorità e cittadino. Quando parliamo di "norme fondamentali", ci riferiamo a quelle regole che non solo stabiliscono chi detiene il potere e come lo esercita (la forma di governo), ma anche quali sono i principi irrinunciabili che informano l'intera convivenza civile e i diritti che nessuna autorità può conculcare (la forma di Stato). L'articolo 1 della nostra Costituzione, per esempio, non si limita a dichiarare la forma di Stato (Repubblica) e di governo (democratica), ma lega inscindibilmente queste forme al principio lavorista, conferendo al lavoro non solo un valore economico, ma anche etico e fondante della stessa identità nazionale. È questo connubio che eleva il diritto costituzionale a presidio della dignità umana.</strong></p>
+            </section>
+
+            <!-- Slide 4: Oggetto -->
+            <section id="slide-4" class="section-card">
+                <h2 class="section-title">4. Oggetto</h2>
+                <h3 class="section-subtitle">L'Oggetto del Diritto Costituzionale</h3>
+                <p class="section-text-summary">Analisi delle forme di Stato e di governo, dei diritti e doveri fondamentali, e degli organi costituzionali.</p>
+                <div class="section-focus">
+                    <p><strong>Il campo d'indagine del diritto costituzionale è vasto e articolato. Al centro abbiamo lo <strong>Stato</strong>, inteso come organizzazione politica e giuridica che esercita la sovranità su un determinato territorio e popolo. Intimamente legata allo Stato è la <strong>Costituzione</strong>, il documento normativo supremo che ne definisce l'assetto e ne disciplina i rapporti. Ma l'anima del diritto costituzionale risiede nella protezione delle <strong>Libertà</strong>. Questo non è un mero elenco di istituzioni o di norme: è uno studio sistematico che collega la teoria generale dello Stato (la sua genesi, i suoi elementi costitutivi) alle garanzie fondamentali della persona e al funzionamento degli organi che incarnano i poteri dello Stato. La distinzione, spesso sottovalutata dagli studenti, tra <strong>forma di Stato</strong> (che attiene al rapporto tra Stato e cittadini, con particolare riguardo al grado di garanzia delle libertà e all'intervento statale nell'economia e nella società) e <strong>forma di governo</strong> (che si riferisce alla ripartizione dei poteri tra gli organi costituzionali e ai loro rapporti reciproci) sarà un filo rosso del nostro corso. Approfondiremo come queste due dimensioni si influenzino reciprocamente e determinino la natura di un ordinamento.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 5: Fonti del Diritto Costituzionale -->
+            <section id="slide-5" class="section-card">
+                <h2 class="section-title">5. Fonti del Diritto Costituzionale</h2>
+                <h3 class="section-subtitle">Il Vertice della Gerarchia Normativa</h3>
+                <p class="section-text-summary">La Costituzione, le leggi costituzionali, le consuetudini costituzionali e i principi supremi.</p>
+                <div class="section-focus">
+                    <p><strong>In un ordinamento giuridico, le fonti del diritto sono come le sorgenti di un fiume: da esse scaturiscono le norme. Nel diritto costituzionale, la fonte per eccellenza è la <strong>Costituzione</strong>, che si pone al vertice della gerarchia delle fonti. La sua posizione apicale deriva dalla sua natura di "legge delle leggi", che fonda e legittima l'intero sistema normativo. Accanto ad essa, troviamo le <strong>leggi costituzionali</strong>, che sono leggi adottate con un procedimento aggravato e che hanno pari rango della Costituzione stessa (es. statuti speciali delle regioni). È fondamentale riconoscere anche le <strong>consuetudini costituzionali</strong>, prassi consolidate nel tempo che, pur non essendo scritte, assumono un valore vincolante per gli organi costituzionali (es. la prassi della consultazione del Presidente della Repubblica prima della nomina del Presidente del Consiglio). Infine, e questo è un aspetto di grande complessità e fascino, i <strong>principi supremi dell'ordinamento costituzionale</strong>. Questi sono principi non espressamente codificati in singoli articoli, ma ricavabili in via interpretativa dall'intero testo costituzionale, e che la giurisprudenza della Corte Costituzionale (pensate al principio di laicità dello Stato, o all'indipendenza della magistratura) ha elevato a rango di limite assoluto anche per la revisione costituzionale. Sono il nucleo irrinunciabile della nostra identità costituzionale.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 6: Rigidità Costituzionale -->
+            <section id="slide-6" class="section-card">
+                <h2 class="section-title">6. Rigidità Costituzionale</h2>
+                <h3 class="section-subtitle">Un Baluardo Contro l'Arbitrio</h3>
+                <p class="section-text-summary">La difficoltà del procedimento di modifica della Costituzione come garanzia di stabilità e tutela dei principi fondamentali.</p>
+                <div class="section-focus">
+                    <p><strong>Il concetto di <strong>rigidità costituzionale</strong> è centrale per comprendere la forza e la stabilità di un ordinamento. A differenza delle Costituzioni flessibili (come quella britannica, che può essere modificata con una legge ordinaria), la nostra Costituzione è "rigida" perché richiede un procedimento aggravato per la sua revisione, stabilito dall'articolo 138. Questo significa che non basta una semplice maggioranza parlamentare per modificarla, ma sono necessarie maggioranze qualificate e, in alcuni casi, un referendum confermativo. Questa rigidità non è un ostacolo all'evoluzione, ma una garanzia. È un baluardo contro gli "arbitrii" delle maggioranze contingenti, una protezione per le minoranze e un meccanismo che assicura che i principi fondamentali su cui si fonda la Repubblica non possano essere stravolti con leggerezza. È la dimostrazione che la Costituzione non è solo un atto politico di un momento, ma un patto solenne tra le generazioni, un punto di riferimento stabile in un mondo in continuo mutamento. Suggerimento: Riflettiamo insieme sui vantaggi di questa rigidità: assicura stabilità politica, protegge i diritti fondamentali dalle derive maggioritarie e favorisce un'interpretazione evolutiva del testo piuttosto che una sua costante riscrittura. Al contempo, quali sono gli svantaggi? Può rallentare l'adattamento a nuove esigenze sociali?</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 7: Concetto di Stato -->
+            <section id="slide-7" class="section-card">
+                <h2 class="section-title">7. Concetto di Stato</h2>
+                <h3 class="section-subtitle">Popolo, Territorio, Sovranità</h3>
+                <p class="section-text-summary">Gli elementi costitutivi dello Stato: popolo, territorio e sovranità.</p>
+                <div class="section-focus">
+                    <p><strong>Quando parliamo di Stato, ci riferiamo a un'organizzazione complessa che, per esistere come tale nel diritto internazionale e nel diritto costituzionale, deve possedere tre elementi essenziali e inscindibili: il <strong>popolo</strong>, il <strong>territorio</strong> e la <strong>sovranità</strong>. Il <strong>popolo</strong> non è una mera somma di individui, ma una comunità che condivide un destino politico comune, spesso legata da un vincolo di cittadinanza. Il <strong>territorio</strong> è lo spazio fisico entro cui lo Stato esercita la sua autorità, comprendendo terraferma, mare territoriale e spazio aereo. Ma l'elemento più controverso e in continua evoluzione è la <strong>sovranità</strong>. Tradizionalmente intesa come supremazia interna (il potere di comandare all'interno dei propri confini, senza riconoscere alcuna autorità superiore) e indipendenza esterna (l'autonomia nelle relazioni internazionali), la sovranità oggi è messa in discussione da fenomeni come la globalizzazione, l'emergere di organizzazioni sovranazionali (penso all'Unione Europea) e la crescente interdipendenza tra gli Stati. Non si tratta più di una sovranità assoluta e monolitica, ma di una sovranità che si "condivide" o si "limita" in nome di obiettivi comuni, pur mantenendo la sua centralità come fondamento dell'autodeterminazione politica. Questo ci porta a interrogarci: la sovranità è ancora "illimitata" nell'era moderna? In che modo l'appartenenza all'UE incide sulla sovranità italiana?</strong></p>
+                    <div class="flex justify-center mt-6">
+                        <!-- Icona Popolo, Territorio, Sovranità -->
+                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-600">
+                            <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4ZM12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6ZM12 16C9.33333 16 7 17.3431 7 19H17C17 17.3431 14.6667 16 12 16Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 8: Forme di Stato (I) -->
+            <section id="slide-8" class="section-card">
+                <h2 class="section-title">8. Forme di Stato (I)</h2>
+                <h3 class="section-subtitle">Democrazia, Autoritarismo, Totalitarismo</h3>
+                <p class="section-text-summary">Classificazione delle forme di Stato in base al rapporto tra governanti e governati e alla tutela delle libertà.</p>
+                <div class="section-focus">
+                    <p><strong>La classificazione delle forme di Stato è fondamentale per comprendere la natura profonda di un ordinamento. Essa si basa sul rapporto che intercorre tra i governanti e i governati e, soprattutto, sul grado di tutela delle libertà individuali e collettive. Partiamo dallo <strong>Stato liberale</strong>, che storicamente emerge dopo le rivoluzioni del XVII e XVIII secolo, caratterizzato da un'affermazione delle libertà negative (libertà "da" ingerenze statali), dalla separazione dei poteri e da un suffragio limitato. Successivamente, con l'ampliamento del suffragio e l'emergere della questione sociale, si sviluppa lo <strong>Stato sociale</strong> (o Stato di benessere), che non si limita a garantire le libertà, ma si assume il compito di rimuovere gli ostacoli di ordine economico e sociale che impediscono la piena realizzazione della persona (pensate all'Art. 3, comma 2, della nostra Costituzione). Sul versante opposto troviamo lo <strong>Stato autoritario</strong> (potere concentrato, limitazione delle libertà ma non annientamento totale della società civile) e lo <strong>Stato totalitario</strong> (potere assoluto che invade ogni sfera dell'esistenza, annullando la distinzione tra pubblico e privato e sopprimendo ogni forma di dissenso). La Repubblica Italiana è, per sua natura, uno Stato sociale democratico, e questo ci impone di riflettere costantemente sul bilanciamento tra efficienza statale e tutela dei diritti, sia civili che sociali.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 9: Forme di Stato (II) -->
+            <section id="slide-9" class="section-card">
+                <h2 class="section-title">9. Forme di Stato (II)</h2>
+                <h3 class="section-subtitle">Dallo Stato Liberale allo Stato Sociale</h3>
+                <p class="section-text-summary">Il passaggio da uno Stato "guardiano" a uno Stato "promotore" del benessere sociale.</p>
+                <div class="section-focus">
+                    <p><strong>Il passaggio dallo Stato liberale allo Stato sociale rappresenta una delle più significative evoluzioni del costituzionalismo moderno. Nello Stato liberale, il ruolo dello Stato era essenzialmente quello di "guardiano notturno": garantire l'ordine pubblico, la sicurezza e la difesa, e intervenire il meno possibile nella sfera economica e sociale. L'individuo era lasciato libero di perseguire i propri interessi, nella convinzione che ciò avrebbe portato al benessere collettivo. Con l'avvento della rivoluzione industriale e l'emergere di gravi disuguaglianze sociali, divenne evidente che la libertà formale non bastava: occorreva garantire anche una libertà "sostanziale". Lo Stato sociale, perciò, assume un ruolo attivo nella promozione del benessere collettivo, intervenendo per rimuovere le disuguaglianze economiche e sociali. Questo si traduce nell'affermazione dei <strong>diritti sociali</strong> (diritto al lavoro, alla salute, all'istruzione, alla previdenza), che richiedono prestazioni positive da parte dello Stato. L'Art. 3, comma 2, della Costituzione italiana ne è la chiara espressione: "È compito della Repubblica rimuovere gli ostacoli di ordine economico e sociale, che, limitando di fatto la libertà e l'eguaglianza dei cittadini, impediscono il pieno sviluppo della persona umana e l'effettiva partecipazione di tutti i lavoratori all'organizzazione politica, economica e sociale del Paese." Questo è un principio programmatico di altissimo valore, che ci impegna a riflettere sulla giustiziabilità di tali diritti e sul loro effettivo godimento.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 10: Forme di Governo (I) -->
+            <section id="slide-10" class="section-card">
+                <h2 class="section-title">10. Forme di Governo (I)</h2>
+                <h3 class="section-subtitle">Presidenzialismo, Parlamentarismo, Semipresidenzialismo</h3>
+                <p class="section-text-summary">Le diverse modalità di ripartizione e bilanciamento dei poteri all'interno dello Stato.</p>
+                <div class="section-focus">
+                    <p><strong>Se la forma di Stato ci dice "chi comanda e per chi", la <strong>forma di governo</strong> ci dice "come si comanda", ovvero come sono ripartiti e come interagiscono i poteri all'interno dello Stato. Essa si focalizza sui rapporti tra gli organi costituzionali, in particolare tra potere legislativo (Parlamento) e potere esecutivo (Governo). Possiamo identificare tre modelli principali: il <strong>parlamentarismo</strong>, caratterizzato da una "separazione flessibile" dei poteri, dove il Governo necessita della fiducia del Parlamento per rimanere in carica e il Parlamento può essere sciolto dal Capo dello Stato; il <strong>presidenzialismo</strong>, con una "separazione rigida" dei poteri, dove il Presidente (capo dell'esecutivo) è eletto direttamente dal popolo e non ha bisogno della fiducia del Parlamento, il quale a sua volta non può essere sciolto dal Presidente (pensate al modello statunitense); e il <strong>semipresidenzialismo</strong>, una forma ibrida che combina elementi di entrambi i modelli (come in Francia). Ogni forma di governo presenta vantaggi e svantaggi in termini di stabilità, rappresentatività e capacità di decisione. La nostra Repubblica adotta una forma di governo parlamentare, e sarà interessante analizzare le sue peculiarità, anche alla luce delle diverse "varianti" di parlamentarismo che possiamo riscontrare.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 11: Forme di Governo (II) -->
+            <section id="slide-11" class="section-card">
+                <h2 class="section-title">11. Forme di Governo (II)</h2>
+                <h3 class="section-subtitle">Il Parlamentarismo</h3>
+                <p class="section-text-summary">Caratteristiche del sistema parlamentare, con particolare attenzione al rapporto di fiducia tra governo e parlamento.</p>
+                <div class="section-focus">
+                    <p><strong>Il <strong>parlamentarismo</strong> è la forma di governo più diffusa in Europa e quella adottata dalla Costituzione italiana. La sua caratteristica essenziale è il <strong>rapporto di fiducia</strong> tra il Governo e il Parlamento. Questo significa che il Governo, una volta nominato dal Presidente della Repubblica, deve ottenere la fiducia di entrambe le Camere (Art. 94 Cost.) per poter rimanere in carica. In caso di voto di sfiducia (mozione di sfiducia) o se il Governo perde la maggioranza in Parlamento, è tenuto a dimettersi. D'altra parte, il Capo dello Stato, su proposta del Governo, può procedere allo <strong>scioglimento anticipato delle Camere</strong>, un meccanismo che riequilibra i poteri, dando voce al corpo elettorale in situazioni di stallo. Questo sistema, pur garantendo una maggiore rappresentatività, può presentare problemi di stabilità, soprattutto in presenza di sistemi multipartitici frammentati, portando a frequenti <strong>crisi di governo</strong>. Analizzeremo la storia repubblicana italiana, ricca di esempi di crisi di governo, per comprendere le dinamiche e le cause che le sottendono, distinguendo tra crisi parlamentari (per voto di sfiducia) e crisi extraparlamentari (per dimissioni del Governo).</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 12: Forme di Governo (III) -->
+            <section id="slide-12" class="section-card">
+                <h2 class="section-title">12. Forme di Governo (III)</h2>
+                <h3 class="section-subtitle">Il Presidenzialismo e il Semipresidenzialismo</h3>
+                <p class="section-text-summary">Analisi delle forme di governo presidenziale (USA) e semipresidenziale (Francia).</p>
+                <div class="section-focus">
+                    <p><strong>Approfondiamo ora le altre due principali forme di governo. Il <strong>presidenzialismo</strong>, il cui archetipo è il sistema degli Stati Uniti, si basa su una netta <strong>separazione dei poteri</strong>. Il Presidente è eletto direttamente dal popolo, è al contempo Capo dello Stato e Capo del Governo, e non ha bisogno della fiducia del Parlamento (Congresso). A sua volta, il Congresso non può sfiduciare il Presidente, né il Presidente può sciogliere il Congresso. Il bilanciamento dei poteri (i famosi "checks and balances") è affidato a meccanismi di controllo reciproco (es. veto presidenziale, impeachment). Questo sistema tende a garantire maggiore stabilità dell'esecutivo, ma può generare situazioni di stallo ("gridlock") in caso di maggioranze divergenti tra Presidenza e Congresso. Il <strong>semipresidenzialismo</strong>, come quello francese della V Repubblica, è un sistema "ibrido". Il Presidente della Repubblica è eletto direttamente dal popolo e ha ampi poteri, ma al suo fianco vi è un Governo guidato da un Primo Ministro, che deve godere della fiducia del Parlamento. Questa configurazione può portare a situazioni di "coabitazione" quando il Presidente e la maggioranza parlamentare appartengono a schieramenti politici diversi, creando interessanti dinamiche di equilibrio. Suggerimento: Confrontiamo in aula i vantaggi (es. stabilità dell'esecutivo nel presidenzialismo) e gli svantaggi (es. rischio di blocco istituzionale, o di eccessiva personalizzazione del potere nel presidenzialismo) di ciascun sistema in termini di efficienza governativa e rappresentatività democratica. Quale sistema ritenete più adatto alle sfide attuali?</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 13: La Sovranità Popolare -->
+            <section id="slide-13" class="section-card">
+                <h2 class="section-title">13. La Sovranità Popolare</h2>
+                <h3 class="section-subtitle">Il Popolo come Titolare del Potere</h3>
+                <p class="section-text-summary">Il principio democratico come fondamento dell'ordinamento.</p>
+                <div class="section-focus">
+                    <p><strong>L'articolo 1, comma 2, della nostra Costituzione recita: "La sovranità appartiene al popolo, che la esercita nelle forme e nei limiti della Costituzione." Questo è il fondamento del principio democratico. Non si tratta di una sovranità assoluta, ma di una sovranità che si incardina nella Costituzione stessa. Il popolo è il <strong>titolare ultimo del potere</strong>, la fonte di ogni legittimazione, ma l'esercizio di questa sovranità non è illimitato: deve avvenire "nelle forme e nei limiti" stabiliti dalla Carta costituzionale. Questo significa che la democrazia non è solo un "governo della maggioranza", ma un governo che rispetta i diritti delle minoranze e i principi inviolabili che la Costituzione stessa pone come limite al potere. È un principio di democrazia costituzionale, che bilancia la volontà popolare con la tutela dei diritti fondamentali. Ci porta a riflettere sul significato profondo del concetto di "popolo": è un'entità giuridica, una comunità di cittadini che partecipano attivamente alla vita democratica, non una massa indistinta.</strong></p>
+                    <div class="flex justify-center mt-6">
+                        <!-- Icona Popolo -->
+                        <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-600">
+                            <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12ZM12 14C9.33333 14 7 15.3431 7 17H17C17 15.3431 14.6667 14 12 14ZM19 12V10H21V12H19ZM3 12V10H5V12H3ZM12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 14: Democrazia Rappresentativa -->
+            <section id="slide-14" class="section-card">
+                <h2 class="section-title">14. Democrazia Rappresentativa</h2>
+                <h3 class="section-subtitle">Il Mandato dei Rappresentanti</h3>
+                <p class="section-text-summary">Il ruolo dei partiti politici e del sistema elettorale nella democrazia rappresentativa.</p>
+                <div class="section-focus">
+                    <p><strong>Nella maggior parte delle democrazie moderne, la sovranità popolare è esercitata principalmente attraverso la <strong>democrazia rappresentativa</strong>. Ciò significa che il popolo elegge dei rappresentanti (parlamentari) che, una volta eletti, agiscono in nome e per conto dell'intera nazione. Questo è il principio del <strong>mandato generale o politico</strong>, espresso dall'articolo 67 della Costituzione: "Ogni membro del Parlamento rappresenta la Nazione ed esercita le sue funzioni senza vincolo di mandato." Questa norma è fondamentale: il deputato o il senatore non rappresenta solo il proprio collegio elettorale o il proprio partito, ma l'intera Nazione. Il divieto di mandato imperativo è una garanzia dell'indipendenza del parlamentare e della sua capacità di agire nell'interesse generale, non solo settoriale. Tuttavia, nella prassi, il ruolo dei <strong>partiti politici</strong> è cruciale: essi sono il motore della democrazia rappresentativa, canali di partecipazione e selezione della classe dirigente. Il <strong>sistema elettorale</strong> (proporzionale, maggioritario, misto) è poi il meccanismo che traduce il voto dei cittadini in seggi parlamentari, influenzando profondamente la governabilità e la rappresentatività del sistema. La democrazia rappresentativa è oggi sotto pressione: come possiamo rafforzarla di fronte alla disaffezione, al populismo e alla crescente complessità delle sfide globali?</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 15: Democrazia Diretta -->
+            <section id="slide-15" class="section-card">
+                <h2 class="section-title">15. Democrazia Diretta</h2>
+                <h3 class="section-subtitle">Strumenti di Partecipazione Popolare</h3>
+                <p class="section-text-summary">Referendum, iniziativa legislativa popolare, petizione.</p>
+                <div class="section-focus">
+                    <p><strong>Accanto alla democrazia rappresentativa, la Costituzione italiana prevede anche strumenti di <strong>democrazia diretta</strong>, che consentono al popolo di intervenire direttamente nel processo decisionale. Il più importante è il <strong>referendum</strong>, in particolare il referendum abrogativo (Art. 75 Cost.), che permette ai cittadini di abrogare, in tutto o in parte, una legge già in vigore. Altri strumenti sono l'<strong>iniziativa legislativa popolare</strong> (Art. 71 Cost.), che consente a un certo numero di elettori di presentare una proposta di legge al Parlamento, e la <strong>petizione</strong> (Art. 50 Cost.), che permette ai cittadini di rivolgersi alle Camere per chiedere provvedimenti legislativi o esporre comuni necessità. Questi strumenti sono fondamentali per rafforzare la partecipazione dei cittadini e contrastare la disaffezione verso la politica. Tuttavia, presentano anche limiti: il referendum, se abusato, può portare a decisioni semplificate su questioni complesse; l'iniziativa legislativa popolare spesso non trova piena applicazione per inerzia parlamentare. Suggerimento: Discutiamo sull'efficacia di questi strumenti: sono sufficienti per garantire una piena partecipazione democratica? Dovremmo ampliare gli strumenti di democrazia diretta (es. referendum propositivo, recall)? Quali sono i rischi e le opportunità di una maggiore "diretta" partecipazione nel contesto di una società complessa?</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 16: I Diritti Fondamentali (I) -->
+            <section id="slide-16" class="section-card">
+                <h2 class="section-title">16. I Diritti Fondamentali (I)</h2>
+                <h3 class="section-subtitle">La Persona al Centro dell'Ordinamento</h3>
+                <p class="section-text-summary">La centralità della persona umana e la tutela dei suoi diritti inviolabili.</p>
+                <div class="section-focus">
+                    <p><strong>L'intero impianto della nostra Costituzione è imperniato sulla centralità della persona umana e sulla tutela dei suoi <strong>diritti inviolabili</strong>. L'articolo 2 della Costituzione è il fondamento di questa impostazione: "La Repubblica riconosce e garantisce i diritti inviolabili dell'uomo, sia come singolo sia nelle formazioni sociali ove si svolge la sua personalità, e richiede l'adempimento dei doveri inderogabili di solidarietà politica, economica e sociale." Il termine "inviolabili" è cruciale: significa che sono diritti pre-esistenti allo Stato, che lo Stato non crea, ma semplicemente "riconosce e garantisce". Essi rappresentano un limite invalicabile per il legislatore e per ogni potere pubblico. Possiamo classificare i diritti fondamentali in diverse "generazioni": i <strong>diritti di libertà</strong> (o di prima generazione), che sono libertà negative che richiedono allo Stato di astenersi dall'intervenire (es. libertà personale, di espressione); i <strong>diritti sociali</strong> (o di seconda generazione), che sono diritti "a prestazione" che richiedono un intervento positivo dello Stato per la loro attuazione (es. diritto alla salute, all'istruzione); e i <strong>nuovi diritti</strong> (o di terza generazione), emergenti dalle trasformazioni sociali e tecnologiche (es. diritto all'ambiente, alla privacy digitale). Questa evoluzione ci mostra la capacità di adattamento della Costituzione alle nuove esigenze della persona.</strong></p>
+                    <div class="flex justify-center mt-6">
+                        <!-- Icona Bilancia della Giustizia -->
+                        <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-600">
+                            <path d="M12 3L4 9V21H20V9L12 3ZM12 5.1L18 9.3V19H6V9.3L12 5.1ZM12 10C10.3431 10 9 11.3431 9 13C9 14.6569 10.3431 16 12 16C13.6569 16 15 14.6569 15 13C15 11.3431 13.6569 10 12 10ZM12 12C12.5523 12 13 12.4477 13 13C13 13.5523 12.5523 14 12 14C11.4477 14 11 13.5523 11 13C11 12.4477 11.4477 12 12 12Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 17: I Diritti Fondamentali (II) -->
+            <section id="slide-17" class="section-card">
+                <h2 class="section-title">17. I Diritti Fondamentali (II)</h2>
+                <h3 class="section-subtitle">Libertà Personale e Inviolabilità del Domicilio</h3>
+                <p class="section-text-summary">Art. 13 Cost. (libertà personale) e Art. 14 Cost. (inviolabilità del domicilio) come pilastri dello Stato di diritto.</p>
+                <div class="section-focus">
+                    <p><strong>Analizziamo due pilastri fondamentali delle libertà civili nello Stato di diritto: la <strong>libertà personale</strong> (Art. 13 Cost.) e l'<strong>inviolabilità del domicilio</strong> (Art. 14 Cost.). L'articolo 13, "La libertà personale è inviolabile", è un principio cardine: nessuno può essere privato della libertà se non per atto motivato dell'autorità giudiziaria e nei soli casi e modi previsti dalla legge. Qui si manifesta la duplice garanzia: la <strong>riserva di legge</strong> (solo la legge può prevedere casi e modi di restrizione della libertà) e la <strong>riserva di giurisdizione</strong> (solo l'autorità giudiziaria può disporre l'atto restrittivo). Ogni forma di detenzione, ispezione o perquisizione personale deve rispettare queste garanzie. Analogamente, l'articolo 14 stabilisce che il domicilio è inviolabile, con le stesse riserve di legge e di giurisdizione. Questi due articoli proteggono la sfera più intima e privata dell'individuo, fungendo da argine contro l'arbitrio del potere esecutivo e garantendo la sicurezza giuridica. Tuttavia, la loro applicazione è complessa e richiede un costante bilanciamento con altre esigenze, come quelle di sicurezza pubblica o di indagine penale. Pensiamo ai limiti di queste libertà in caso di "giusta causa" o "flagranza di reato" e al delicato equilibrio che la giurisprudenza deve ogni volta trovare.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 18: Libertà di Espressione -->
+            <section id="slide-18" class="section-card">
+                <h2 class="section-title">18. Libertà di Espressione</h2>
+                <h3 class="section-subtitle">La Colonna Portante della Democrazia</h3>
+                <p class="section-text-summary">Art. 21 Cost. e i suoi limiti intrinseci (es. buon costume, onore).</p>
+                <div class="section-focus">
+                    <p><strong>La <strong>libertà di manifestazione del pensiero</strong> (Art. 21 Cost.) è considerata la "colonna portante" di una democrazia, in quanto condizione indispensabile per la formazione di un'opinione pubblica libera e informata. Essa comprende non solo il diritto di esprimere le proprie idee, ma anche il diritto di informare e di essere informati. La Costituzione, tuttavia, non garantisce una libertà illimitata. L'articolo 21 stesso pone un limite esplicito: "Sono vietate le pubblicazioni a stampa, gli spettacoli e tutte le altre manifestazioni contrarie al buon costume." La giurisprudenza ha poi individuato altri limiti impliciti, quali la tutela dell'onore e della reputazione altrui, la protezione del segreto di Stato, la prevenzione dell'incitamento all'odio o alla violenza. Il vero nodo della libertà di espressione risiede nel <strong>bilanciamento</strong> tra questo diritto fondamentale e altri valori costituzionalmente protetti. Pensiamo alle sfide poste dalle "fake news" e dall'<strong>hate speech</strong> nell'era digitale: come conciliare la libertà di espressione con la necessità di combattere la disinformazione e l'incitamento all'odio, senza cadere nella censura? Questo è uno dei dibattiti più attuali e complessi nel diritto costituzionale.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 19: Libertà di Associazione e di Riunione -->
+            <section id="slide-19" class="section-card">
+                <h2 class="section-title">19. Libertà di Associazione e di Riunione</h2>
+                <h3 class="section-subtitle">Strumenti di Partecipazione Civile</h3>
+                <p class="section-text-summary">Art. 17 Cost. (riunione) e Art. 18 Cost. (associazione) come presidi della società civile.</p>
+                <div class="section-focus">
+                    <p><strong>La democrazia non si esprime solo attraverso il voto, ma anche attraverso la <strong>partecipazione collettiva</strong>. La Costituzione garantisce due diritti fondamentali in tal senso: la <strong>libertà di riunione</strong> (Art. 17 Cost.) e la <strong>libertà di associazione</strong> (Art. 18 Cost.). La libertà di riunione consente ai cittadini di incontrarsi e manifestare insieme le proprie idee, senza necessità di autorizzazione preventiva, se la riunione avviene in luogo privato. Per le riunioni in luogo pubblico, è sufficiente un preavviso alle autorità, che possono vietarle solo per comprovati motivi di sicurezza o incolumità pubblica. La libertà di associazione garantisce il diritto di associarsi liberamente per fini non vietati dalla legge penale. Questa è la base per la nascita e lo sviluppo dei partiti politici, dei sindacati, delle organizzazioni professionali, delle associazioni di volontariato, e di tutti quei corpi intermedi che compongono la "società civile" e che sono essenziali per il pluralismo democratico. Tuttavia, anche queste libertà hanno dei limiti: sono vietate le associazioni segrete e quelle che perseguono scopi eversivi o di carattere paramilitare. L'equilibrio tra la tutela di queste libertà e la necessità di prevenire abusi è costantemente sotto la lente della giurisprudenza.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 20: I Diritti Sociali (I) -->
+            <section id="slide-20" class="section-card">
+                <h2 class="section-title">20. I Diritti Sociali (I)</h2>
+                <h3 class="section-subtitle">La Promozione del Benessere Collettivo</h3>
+                <p class="section-text-summary">Diritto al lavoro, alla salute, all'istruzione, alla previdenza. Concetto e natura.</p>
+                <div class="section-focus">
+                    <p><strong>I <strong>diritti sociali</strong> rappresentano la seconda generazione di diritti fondamentali e sono il cuore dello Stato sociale. A differenza dei diritti di libertà, che impongono allo Stato un dovere di "non fare", i diritti sociali richiedono un'azione positiva dello Stato per la loro attuazione. Pensiamo al <strong>diritto al lavoro</strong> (Art. 4 Cost. e Artt. 35 ss.), che non è solo libertà di lavorare, ma anche garanzia di accesso al lavoro e tutela delle condizioni lavorative. Il <strong>diritto alla salute</strong> (Art. 32 Cost.) è un diritto fondamentale dell'individuo e interesse della collettività, che impone alla Repubblica di garantire cure gratuite agli indigenti. Il <strong>diritto all'istruzione</strong> (Art. 34 Cost.) è garantito a tutti, con la previsione di scuole aperte a tutti e l'istituzione di borse di studio. La <strong>previdenza e assistenza sociale</strong> (Art. 38 Cost.) sono garantite a tutti i cittadini inabili al lavoro o sprovvisti dei mezzi necessari per vivere.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 21: I Diritti Sociali (II) -->
+            <section id="slide-21" class="section-card">
+                <h2 class="section-title">21. I Diritti Sociali (II)</h2>
+                <h3 class="section-subtitle">La Giustiziabilità e le Sfide</h3>
+                <p class="section-text-summary">Analisi della giustiziabilità dei diritti sociali e delle problematiche di attuazione.</p>
+                <div class="section-focus">
+                    <p><strong>La grande sfida dei diritti sociali risiede nella loro <strong>giustiziabilità</strong>: possono i cittadini far valere in giudizio il mancato rispetto di questi diritti? La loro piena attuazione dipende spesso dalla disponibilità di risorse economiche, il che genera un dibattito costante sul bilanciamento tra la tutela dei diritti e la sostenibilità finanziaria dello Stato. Questi diritti sono essenziali per il pieno sviluppo della persona e per una vera uguaglianza sostanziale. Il loro carattere "a prestazione" li rende diversi dai diritti di libertà, che sono più facilmente azionabili. La Corte Costituzionale, in diverse pronunce, ha cercato di definire il nucleo essenziale di questi diritti che deve essere comunque garantito, indipendentemente dalle risorse disponibili, ma il tema rimane aperto e complesso, soprattutto in periodi di crisi economica.</strong></p>
+                </div class="section-focus">
+            </section>
+
+            <!-- Slide 22: Doveri Costituzionali -->
+            <section id="slide-22" class="section-card">
+                <h2 class="section-title">22. Doveri Costituzionali</h2>
+                <h3 class="section-subtitle">La Contropartita dei Diritti</h3>
+                <p class="section-text-summary">Doveri di solidarietà politica, economica e sociale (Art. 2 Cost.), dovere tributario (Art. 53 Cost.), dovere di difesa della Patria (Art. 52 Cost.).</p>
+                <div class="section-focus">
+                    <p><strong>La Costituzione italiana non è solo una "Carta dei diritti", ma anche una "Carta dei doveri". L'articolo 2, dopo aver riconosciuto i diritti inviolabili, richiede "l'adempimento dei doveri inderogabili di solidarietà politica, economica e sociale." Questo significa che la libertà individuale non è assoluta e isolata, ma si colloca all'interno di una comunità e comporta responsabilità. Tra i doveri più significativi troviamo il <strong>dovere tributario</strong> (Art. 53 Cost.), che impone a tutti di concorrere alle spese pubbliche in ragione della propria capacità contributiva, secondo un criterio di progressività. Questo dovere è fondamentale per finanziare i servizi pubblici e garantire l'attuazione dei diritti sociali. Un altro dovere fondamentale è quello di <strong>difesa della Patria</strong> (Art. 52 Cost.), che è un "sacro dovere del cittadino", anche se oggi è assolto principalmente attraverso il servizio militare volontario. L'esistenza dei doveri costituzionali sottolinea il carattere bidirezionale del rapporto tra cittadino e Stato: ai diritti corrispondono responsabilità, alla libertà corrisponde la solidarietà. È il fondamento di una "cittadinanza attiva" e responsabile. Suggerimento: Riflettiamo insieme: quali altri "doveri" impliciti possiamo ricavare dalla Costituzione, ad esempio in relazione alla tutela dell'ambiente o al rispetto delle istituzioni? E come si bilanciano diritti e doveri nel contesto attuale?</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 23: Il Parlamento (I) -->
+            <section id="slide-23" class="section-card">
+                <h2 class="section-title">23. Il Parlamento (I)</h2>
+                <h3 class="section-subtitle">La Sede della Rappresentanza Popolare</h3>
+                <p class="section-text-summary">Struttura bicamerale (Camera dei Deputati e Senato della Repubblica), funzioni e poteri.</p>
+                <div class="section-focus">
+                    <p><strong>Il <strong>Parlamento</strong> è l'organo per eccellenza della democrazia rappresentativa e, nel nostro sistema, si caratterizza per una struttura <strong>bicamerale perfetta o paritaria</strong>, composta dalla Camera dei Deputati e dal Senato della Repubblica. "Perfetta" significa che le due Camere hanno identici poteri e funzioni, e una legge deve essere approvata nello stesso testo da entrambe per poter entrare in vigore (Art. 70 Cost.). Questa scelta dei Costituenti, nata dalla necessità di bilanciare le spinte maggioritarie e di assicurare una maggiore ponderazione del processo legislativo, è stata spesso oggetto di dibattito per la sua potenziale inefficienza ("navetta"). Il Parlamento è la sede primaria della <strong>funzione legislativa</strong>, ovvero la produzione delle leggi, ma svolge anche cruciali <strong>funzioni di indirizzo e di controllo</strong> sul Governo. Il suo ruolo è centrale nel garantire la trasparenza e la responsabilità dell'esecutivo, attraverso strumenti come le mozioni di fiducia e sfiducia, le interpellanze e le interrogazioni. La sua composizione e il suo funzionamento sono disciplinati dagli Artt. 55 e seguenti della Costituzione, e la loro comprensione è essenziale per afferrare le dinamiche della nostra forma di governo.</strong></p>
+                    <div class="flex justify-center mt-6">
+                        <!-- Icona Parlamento -->
+                        <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-600">
+                            <path d="M12 2L3 7V22H21V7L12 2ZM12 4.14L19 8.2V20H5V8.2L12 4.14ZM10 10H14V18H10V10ZM7 10H9V18H7V10ZM15 10H17V18H15V10Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 24: Il Parlamento (II) -->
+            <section id="slide-24" class="section-card">
+                <h2 class="section-title">24. Il Parlamento (II)</h2>
+                <h3 class="section-subtitle">Le Funzioni del Parlamento</h3>
+                <p class="section-text-summary">Legislativa, di Indirizzo, di Controllo</p>
+                <div class="section-focus">
+                    <p><strong>Approfondiamo le tre funzioni cardine del Parlamento. La <strong>funzione legislativa</strong> è la più evidente: il Parlamento è il titolare esclusivo del potere di fare le leggi. Il <strong>procedimento legislativo</strong> è complesso, articolato in fase di iniziativa (proposta di legge), fase deliberativa (discussione e votazione nelle Camere), fase integrativa dell'efficacia (promulgazione del Presidente della Repubblica e pubblicazione sulla Gazzetta Ufficiale). Studieremo le diverse procedure (ordinaria, abbreviata, decentrata) e i rischi di "leggi-delega" o "decretazione d'urgenza" che possono ridurre il ruolo centrale del Parlamento. La <strong>funzione di indirizzo politico</strong> si esplica nella capacità del Parlamento di determinare le linee guida dell'azione governativa, principalmente attraverso il rapporto di fiducia. Infine, la <strong>funzione di controllo</strong> sull'operato del Governo è cruciale per la responsabilizzazione dell'esecutivo: le <strong>mozioni di sfiducia</strong> possono portare alla caduta del Governo, mentre le <strong>interpellanze</strong> (volte a conoscere i motivi della condotta del Governo su una questione) e le <strong>interrogazioni</strong> (volte a ottenere informazioni su fatti specifici) sono strumenti quotidiani di sindacato parlamentare. La qualità della democrazia parlamentare dipende in larga misura dall'effettivo esercizio di queste funzioni.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 25: Il Governo (I) -->
+            <section id="slide-25" class="section-card">
+                <h2 class="section-title">25. Il Governo (I)</h2>
+                <h3 class="section-subtitle">L'Organo Esecutivo</h3>
+                <p class="section-text-summary">Presidente del Consiglio dei Ministri, Ministri, Consiglio dei Ministri.</p>
+                <div class="section-focus">
+                    <p><strong>Il <strong>Governo</strong> è l'organo che incarna il potere esecutivo e detiene la funzione di indirizzo politico. È composto dal <strong>Presidente del Consiglio dei Ministri</strong>, che ne è il capo e lo dirige, dai <strong>Ministri</strong>, preposti ai diversi dicasteri, e dal <strong>Consiglio dei Ministri</strong>, l'organo collegiale che delibera sulle questioni più importanti. La sua formazione è un processo complesso (Artt. 92 ss. Cost.) che si avvia con le consultazioni del Presidente della Repubblica, il conferimento dell'incarico, l'accettazione e la nomina dei ministri, e si conclude, come abbiamo visto, con il voto di fiducia del Parlamento. La struttura collegiale del Governo è fondamentale: le decisioni più rilevanti sono assunte dal Consiglio dei Ministri, garantendo una maggiore ponderazione e una condivisione di responsabilità. Tuttavia, il ruolo del Presidente del Consiglio è preminente, essendo titolare del potere di indirizzo e coordinamento. Analizzeremo anche le dinamiche interne al Governo e le diverse configurazioni ministeriali, dai "governi tecnici" ai "governi politici", per comprenderne le implicazioni sulla stabilità e sull'efficacia dell'azione governativa.</strong></p>
+                    <div class="flex justify-center mt-6">
+                        <!-- Icona Governo (Gavel) -->
+                        <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-600">
+                            <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4ZM12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6ZM12 16C9.33333 16 7 17.3431 7 19H17C17 17.3431 14.6667 16 12 16Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 26: Il Governo (II) -->
+            <section id="slide-26" class="section-card">
+                <h2 class="section-title">26. Il Governo (II)</h2>
+                <h3 class="section-subtitle">Le Funzioni del Governo</h3>
+                <p class="section-text-summary">Indirizzo Politico, Amministrativa, Normativa</p>
+                <div class="section-focus">
+                    <p><strong>Il Governo esercita diverse funzioni cruciali. La <strong>funzione di indirizzo politico</strong> è la più strategica: il Governo definisce le linee guida della politica nazionale, elabora i programmi e li attua, sia sul piano interno che internazionale. Accanto a questa, vi è la <strong>funzione amministrativa</strong>, attraverso la quale il Governo gestisce la pubblica amministrazione e assicura l'erogazione dei servizi pubblici. Ma un aspetto di particolare rilevanza è la <strong>funzione normativa</strong>, che, seppur in via eccezionale, permette al Governo di produrre atti con forza di legge, pur non essendo il titolare del potere legislativo. Parliamo dei <strong>decreti-legge</strong> (Art. 77 Cost.) e dei <strong>decreti legislativi</strong> (Art. 76 Cost.). Il decreto-legge è adottato in casi straordinari di necessità e urgenza, ha efficacia immediata, ma deve essere convertito in legge dal Parlamento entro 60 giorni, pena la sua decadenza. Il decreto legislativo, invece, è emanato su delega del Parlamento, che fissa i principi e i criteri direttivi. L'abuso dei decreti-legge, o l'eccessiva generalità delle leggi delega, sono questioni che pongono costantemente un problema di rispetto dei principi di separazione dei poteri e di centralità del Parlamento. Analizzeremo la giurisprudenza della Corte Costituzionale in merito alla legittimità di questi atti.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 27: Il Presidente della Repubblica (I) -->
+            <section id="slide-27" class="section-card">
+                <h2 class="section-title">27. Il Presidente della Repubblica (I)</h2>
+                <h3 class="section-subtitle">Il Capo dello Stato e Garante della Costituzione</h3>
+                <p class="section-text-summary">Elezione, poteri, doveri, durata in carica.</p>
+                <div class="section-focus">
+                    <p><strong>Il <strong>Presidente della Repubblica</strong> è la più alta carica dello Stato, rappresenta l'unità nazionale e ha un ruolo di "garante della Costituzione" e di "arbitro" super partes tra i poteri dello Stato. Non è il capo del Governo, né il titolare di un potere esecutivo politico, ma un custode imparziale. La sua <strong>elezione</strong> (Art. 83 Cost.) avviene a scrutinio segreto dal Parlamento in seduta comune, integrato da delegati regionali, con maggioranze qualificate per assicurare la massima convergenza e superare le logiche partitiche. Dura in carica sette anni e può essere rieletto. I suoi <strong>poteri</strong> sono numerosi e complessi (Artt. 87 ss. Cost.): nomina il Presidente del Consiglio, scioglie le Camere, promulga le leggi, comanda le Forze Armate, presiede il Consiglio Superiore della Magistratura, accredita gli ambasciatori, concede la grazia. La sua figura è cruciale nei momenti di crisi politica, dove svolge un ruolo di mediazione e composizione. La sua firma sui vari atti, detta "controfirma ministeriale", serve a trasferire la responsabilità politica dell'atto dal Presidente al ministro proponente, ma il Capo dello Stato conserva comunque un potere di "sollecitazione" e di "rifiuto motivato".</strong></p>
+                    <div class="flex justify-center mt-6">
+                        <!-- Icona Presidente della Repubblica (Stemma) -->
+                        <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-600">
+                            <path d="M12 2L2 7V17L12 22L22 17V7L12 2ZM12 4.14L20 8.2V15.8L12 19.86L4 15.8V8.2L12 4.14ZM12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7ZM12 9C12.5523 9 13 9.44772 13 10C13 10.5523 12.5523 11 12 11C11.4477 11 11 10.5523 11 10C11 9.44772 11.4477 9 12 9Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 28: Il Presidente della Repubblica (II) -->
+            <section id="slide-28" class="section-card">
+                <h2 class="section-title">28. Il Presidente della Repubblica (II)</h2>
+                <h3 class="section-subtitle">Le Funzioni del Presidente della Repubblica</h3>
+                <p class="section-text-summary">Di Garanzia, di Rappresentanza, di Equilibrio</p>
+                <div class="section-focus">
+                    <p><strong>Le funzioni del Presidente della Repubblica possono essere raggruppate in diverse categorie. Le <strong>funzioni di garanzia</strong> sono quelle che gli permettono di vigilare sulla corretta applicazione della Costituzione e sul rispetto delle regole del gioco democratico (es. rinvio delle leggi al Parlamento, giudizio sul conflitto di attribuzione). Le <strong>funzioni di rappresentanza</strong> lo vedono come il simbolo dell'unità nazionale e il rappresentante supremo dello Stato all'estero. Le <strong>funzioni di equilibrio</strong> si manifestano nel suo ruolo di "arbitro" tra i poteri dello Stato, in particolare nei momenti di crisi politica, quando ha il compito di sciogliere le Camere o di conferire l'incarico di formare il Governo. Tra i poteri specifici, meritano menzione la <strong>promulgazione delle leggi</strong> (Art. 73 Cost.), attraverso la quale la legge acquista piena efficacia; la <strong>nomina dei Ministri</strong> (Art. 92 Cost.), atto di sua competenza ma su proposta del Presidente del Consiglio; lo <strong>scioglimento anticipato delle Camere</strong> (Art. 88 Cost.), che è un potere "a termine" per evitare abusi; e la <strong>presidenza del Consiglio Superiore della Magistratura</strong> (CSM) (Art. 104 Cost.), che ne sottolinea il ruolo di garante dell'indipendenza della magistratura. Il "potere di esternazione" del Presidente, ovvero la sua capacità di intervenire nel dibattito pubblico con autorevoli messaggi, è un'altra espressione del suo ruolo di guida morale della nazione, spesso cruciale per il riequilibrio delle tensioni politiche.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 29: La Magistratura (I) -->
+            <section id="slide-29" class="section-card">
+                <h2 class="section-title">29. La Magistratura (I)</h2>
+                <h3 class="section-subtitle">L'Ordine Giudiziario Indipendente</h3>
+                <p class="section-text-summary">Indipendenza e autonomia della magistratura dagli altri poteri dello Stato.</p>
+                <div class="section-focus">
+                    <p><strong>La <strong>Magistratura</strong> (Artt. 101 ss. Cost.) è, per la nostra Costituzione, un "ordine" autonomo e indipendente da ogni altro potere. Questo principio di <strong>indipendenza</strong> è fondamentale per garantire l'imparzialità e l'effettività della giustizia. L'articolo 101, comma 2, afferma che "i giudici sono soggetti soltanto alla legge", sottolineando che il magistrato, nell'esercizio delle sue funzioni, non deve obbedire ad alcun potere politico o pressione esterna, ma solo alla norma giuridica. L'indipendenza si manifesta sia sul piano esterno (dall'esecutivo, dal legislativo, da altre influenze) sia sul piano interno (garanzia della inamovibilità, del concorso per l'accesso, della progressione di carriera per anzianità e merito). La Costituzione garantisce il <strong>principio del "giudice naturale"</strong> (Art. 25 Cost.), ovvero la predeterminazione per legge del giudice competente per ogni causa, a tutela del cittadino contro la costituzione di tribunali speciali o <em>ad hoc</em>. La magistratura è il presidio dello Stato di diritto, l'ultima frontiera della difesa dei diritti dei cittadini contro i soprusi o le deviazioni del potere. Il suo ruolo è tanto più cruciale in una democrazia complessa come la nostra.</strong></p>
+                    <div class="flex justify-center mt-6">
+                        <!-- Icona Tribunale (Gavel e Libro) -->
+                        <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-600">
+                            <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4ZM12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6ZM12 16C9.33333 16 7 17.3431 7 19H17C17 17.3431 14.6667 16 12 16Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 30: La Magistratura (II) -->
+            <section id="slide-30" class="section-card">
+                <h2 class="section-title">30. La Magistratura (II)</h2>
+                <h3 class="section-subtitle">Il Consiglio Superiore della Magistratura (CSM)</h3>
+                <p class="section-text-summary">Composizione, funzioni e ruolo del CSM nella garanzia dell'indipendenza della magistratura.</p>
+                <div class="section-focus">
+                    <p><strong>Per garantire l'indipendenza della magistratura, la Costituzione ha previsto un organo di <strong>autogoverno</strong>, il <strong>Consiglio Superiore della Magistratura (CSM)</strong> (Art. 104 Cost.). È presieduto dal Presidente della Repubblica e composto per due terzi da membri eletti dai magistrati stessi e per un terzo da membri laici eletti dal Parlamento in seduta comune. Il CSM è responsabile per tutte le decisioni relative allo status dei magistrati: assunzioni, assegnazioni, trasferimenti, promozioni, provvedimenti disciplinari. In questo modo, si sottrae al potere esecutivo ogni ingerenza sulla carriera dei giudici, rafforzando la loro autonomia. Tuttavia, la composizione elettiva del CSM è stata oggetto di frequenti critiche e dibattiti, in particolare riguardo al rischio di "correntismo" interno alla magistratura, che potrebbe minare l'imparzialità dell'organo. Le recenti proposte di riforma del CSM mirano proprio a mitigare queste problematiche e a rafforzare la trasparenza e l'imparzialità. È un tema complesso, che tocca il cuore stesso della credibilità della giustizia in un Paese democratico. Suggerimento: Riflettiamo sull'opportunità di modificare la composizione o le modalità di elezione del CSM per rafforzarne l'indipendenza e la percezione di imparzialità. Quali sono i pro e i contro delle diverse soluzioni proposte?</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 31: La Corte Costituzionale (I) -->
+            <section id="slide-31" class="section-card">
+                <h2 class="section-title">31. La Corte Costituzionale (I)</h2>
+                <h3 class="section-subtitle">Il Garante della Costituzione</h3>
+                <p class="section-text-summary">Composizione, elezione e funzioni principali.</p>
+                <div class="section-focus">
+                    <p><strong>La <strong>Corte Costituzionale</strong> (Artt. 134 ss. Cost.) è l'organo supremo di garanzia della Costituzione. È il "custode della Costituzione", il giudice che assicura che le leggi ordinarie e gli atti con forza di legge rispettino i principi e le norme della Carta fondamentale. La sua <strong>composizione</strong> è di quindici giudici, nominati per un terzo dal Presidente della Repubblica, per un terzo dal Parlamento in seduta comune e per un terzo dalle supreme magistrature ordinaria e amministrative. Durano in carica nove anni e non sono rieleggibili, a garanzia della loro indipendenza e imparzialità. La sua funzione principale è il <strong>giudizio di legittimità costituzionale delle leggi</strong>, ma esercita anche altre funzioni cruciali, come il giudizio sui conflitti di attribuzione tra i poteri dello Stato e tra Stato e Regioni, e il giudizio sulle accuse mosse al Presidente della Repubblica. L'istituzione della Corte Costituzionale nel nostro ordinamento è relativamente recente (le sue funzioni sono iniziate nel 1956) ma ha rivoluzionato il sistema giuridico, elevando la Costituzione a norma effettivamente vincolante per tutti, compreso il legislatore. Senza la Corte, la rigidità costituzionale sarebbe solo una dichiarazione di intenti.</strong></p>
+                    <div class="flex justify-center mt-6">
+                        <!-- Icona Costituzione -->
+                        <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-600">
+                            <path d="M19 2H5C3.89543 2 3 2.89543 3 4V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V4C21 2.89543 20.1046 2 19 2ZM19 4V20H5V4H19ZM12 6H7V8H12V6ZM12 10H7V12H12V10ZM17 6H14V8H17V6ZM17 10H14V12H17V10Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 32: La Corte Costituzionale (II) -->
+            <section id="slide-32" class="section-card">
+                <h2 class="section-title">32. La Corte Costituzionale (II)</h2>
+                <h3 class="section-subtitle">Le Funzioni della Corte Costituzionale</h3>
+                <p class="section-text-summary">Controllo di Costituzionalità, Conflitti di Attribuzione, Giudizio sulle Accuse</p>
+                <div class="section-focus">
+                    <p><strong>Approfondiamo le funzioni principali della Corte Costituzionale. La più nota e frequente è il <strong>giudizio di legittimità costituzionale delle leggi</strong>. Attraverso questo giudizio, la Corte verifica se una legge o un atto con forza di legge (decreto-legge o decreto legislativo) sia conforme ai precetti costituzionali. Se la legge viene dichiarata incostituzionale, essa cessa di avere efficacia dal giorno successivo alla pubblicazione della sentenza. Questo potere è cruciale per la tutela dei diritti e per il rispetto dei principi costituzionali. Altra funzione importante è il <strong>giudizio sui conflitti di attribuzione tra i poteri dello Stato</strong> (es. tra Parlamento e Governo, o tra Governo e Magistratura) e <strong>tra Stato e Regioni</strong>. Questi conflitti sorgono quando un organo ritiene che un altro abbia esercitato indebitamente una propria competenza, o abbia leso le proprie attribuzioni. Infine, la Corte svolge il <strong>giudizio sulle accuse mosse al Presidente della Repubblica</strong> per alto tradimento o attentato alla Costituzione, in composizione allargata con membri tratti da un elenco di cittadini. Ogni sentenza della Corte Costituzionale non è solo un atto giuridico, ma un atto politico nel senso più alto del termine, che incide profondamente sull'equilibrio istituzionale e sulla vita dei cittadini.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 33: Il Giudizio di Legittimità Costituzionale -->
+            <section id="slide-33" class="section-card">
+                <h2 class="section-title">33. Il Giudizio di Legittimità Costituzionale</h2>
+                <h3 class="section-subtitle">Via Incidentale e Via Principale</h3>
+                <p class="section-text-summary">Le due modalità di accesso alla Corte Costituzionale per il controllo di legittimità.</p>
+                <div class="section-focus">
+                    <p><strong>L'accesso alla Corte Costituzionale per il giudizio di legittimità costituzionale può avvenire in due modi principali. La <strong>via incidentale</strong> (o in via di eccezione) è la più frequente: si verifica quando, nel corso di un giudizio davanti a un giudice ordinario (il "giudice a quo"), sorge il dubbio che una norma applicabile a quel caso sia incostituzionale. Il giudice, se ritiene la questione "rilevante" (cioè indispensabile per decidere la causa) e "non manifestamente infondata", sospende il giudizio e rimette la questione alla Corte Costituzionale. Questo meccanismo garantisce un <strong>controllo diffuso</strong> di costituzionalità, in cui ogni giudice può diventare custode della Costituzione, pur essendoci poi un <strong>controllo accentrato</strong> in capo alla sola Corte. La <strong>via principale</strong> (o in via d'azione) è invece accessibile solo allo Stato contro le leggi regionali, o alle Regioni contro le leggi statali o di altre Regioni, quando ritengono che una legge invada le loro competenze legislative. Questo modello, detto "modello Kelseniano", mira a risolvere i conflitti tra gli enti e a prevenire l'applicazione di norme incostituzionali. Le sentenze della Corte possono essere di accoglimento (la norma è incostituzionale) o di rigetto (la norma è costituzionale), ma anche "manipolative" (che aggiungono o sostituiscono parti alla norma) o "interpretative" (che stabiliscono la corretta interpretazione conforme a Costituzione). Il potere interpretativo della Corte è un aspetto affascinante della sua funzione.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 34: Gli Enti Territoriali (I) -->
+            <section id="slide-34" class="section-card">
+                <h2 class="section-title">34. Gli Enti Territoriali (I)</h2>
+                <h3 class="section-subtitle">Autonomie Locali e Regionalismo</h3>
+                <p class="section-text-summary">Comuni, Province, Città Metropolitane, Regioni.</p>
+                <div class="section-focus">
+                    <p><strong>La Costituzione italiana, nel Titolo V (Artt. 114 ss.), disciplina l'assetto delle <strong>autonomie territoriali</strong>, riconoscendo e promuovendo il principio di autonomia di Comuni, Province, Città Metropolitane e Regioni. Questo disegno costituzionale mira a garantire una maggiore vicinanza dei poteri pubblici ai cittadini e a valorizzare le specificità locali. Il <strong>principio di sussidiarietà</strong> (Art. 118 Cost.), introdotto con la riforma del Titolo V del 2001, è il vero motore di questo assetto: esso prevede che le funzioni amministrative siano attribuite all'ente territoriale più vicino ai cittadini (Comune), salvo che non siano richieste esigenze di maggiore efficienza per giustificare il loro esercizio a un livello superiore (Provincia, Città Metropolitana, Regione, Stato). Il principio di sussidiarietà si articola in una dimensione verticale (tra i diversi livelli di governo) e orizzontale (valorizzando il ruolo dei privati e della società civile). Comprendere le dinamiche di questa architettura istituzionale è fondamentale per apprezzare la complessità del nostro sistema di governo e le sfide legate al rapporto tra governo centrale e autonomie locali.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 35: Gli Enti Territoriali (II) -->
+            <section id="slide-35" class="section-card">
+                <h2 class="section-title">35. Gli Enti Territoriali (II)</h2>
+                <h3 class="section-subtitle">Il Regionalismo Italiano</h3>
+                <p class="section-text-summary">Ordinario, Speciale, Differenziato</p>
+                <div class="section-focus">
+                    <p><strong>Il <strong>regionalismo italiano</strong> è un modello peculiare, frutto di un compromesso storico e di successive evoluzioni. La Costituzione distingue tra <strong>Regioni a statuto ordinario</strong> (disciplinate da una legge dello Stato e con competenze legislative e amministrative definite dall'Art. 117 Cost.) e <strong>Regioni a statuto speciale</strong> (Friuli Venezia Giulia, Sardegna, Sicilia, Trentino-Alto Adige/Südtirol, Valle d'Aosta), che godono di forme e condizioni particolari di autonomia, stabilite da leggi costituzionali, in ragione delle loro peculiarità storiche, geografiche o linguistiche. La riforma del 2001 ha rafforzato l'autonomia delle Regioni ordinarie, ampliando le loro competenze legislative e introducendo il concetto di <strong>autonomia differenziata</strong> (Art. 116, comma 3, Cost.). Questa possibilità consente alle Regioni ordinarie, che ne facciano richiesta, di ottenere maggiori competenze legislative e amministrative in determinate materie, previa intesa con lo Stato. L'autonomia differenziata è un tema di grande attualità e dibattito: quali sono i suoi vantaggi in termini di efficienza e responsabilizzazione? E quali i rischi in termini di frammentazione, disparità tra i territori e incertezza del quadro normativo? Sarà cruciale analizzare le implicazioni pratiche di questa evoluzione del regionalismo.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 36: Revisione Costituzionale -->
+            <section id="slide-36" class="section-card">
+                <h2 class="section-title">36. Revisione Costituzionale</h2>
+                <h3 class="section-subtitle">Il Potere di Modificare la Carta Fondamentale</h3>
+                <p class="section-text-summary">Il procedimento aggravato per la revisione della Costituzione.</p>
+                <div class="section-focus">
+                    <p><strong>Abbiamo già parlato della rigidità della Costituzione, ma è fondamentale approfondire il <strong>procedimento di revisione costituzionale</strong> disciplinato dall'articolo 138. Questo articolo stabilisce un iter più complesso rispetto alla legge ordinaria: prevede due successive deliberazioni da parte di ciascuna Camera, con un intervallo non inferiore a tre mesi tra la prima e la seconda votazione. Nella seconda votazione, la legge costituzionale deve essere approvata a maggioranza assoluta dei componenti di ciascuna Camera. Se nella seconda votazione si raggiunge una maggioranza qualificata dei due terzi dei componenti, la legge è promulgata. Se invece viene approvata a maggioranza assoluta ma non qualificata, può essere richiesta la celebrazione di un <strong>referendum costituzionale</strong> (entro tre mesi dalla pubblicazione sulla Gazzetta Ufficiale) da un quinto dei membri di una Camera, o da 500.000 elettori, o da cinque Consigli regionali. L'importanza di questo procedimento risiede nei <strong>limiti alla revisione costituzionale</strong>. L'articolo 139 stabilisce che "La forma repubblicana non può essere oggetto di revisione costituzionale". La giurisprudenza della Corte Costituzionale ha poi individuato ulteriori "principi supremi" non modificabili, come la tutela dei diritti inviolabili dell'uomo o il principio democratico. Questo ci porta a interrogarci sul concetto di "Costituzione materiale" e sui limiti impliciti al potere di revisione.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 37: Diritto Internazionale e Diritto Costituzionale -->
+            <section id="slide-37" class="section-card">
+                <h2 class="section-title">37. Diritto Internazionale e Diritto Costituzionale</h2>
+                <h3 class="section-subtitle">L'Apertura Costituzionale all'Ordinamento Internazionale</h3>
+                <p class="section-text-summary">Adattamento del diritto interno al diritto internazionale consuetudinario e pattizio.</p>
+                <div class="section-focus">
+                    <p><strong>La nostra Costituzione non è un sistema chiuso, ma si apre all'ordinamento internazionale, riconoscendo l'importanza del diritto delle genti. L'articolo 10, comma 1, è la "clausola di adattamento automatico": "L'ordinamento giuridico italiano si conforma alle norme del diritto internazionale generalmente riconosciute." Questo significa che le consuetudini internazionali (norme non scritte, ma universalmente accettate) entrano automaticamente nel nostro ordinamento con rango costituzionale. Per quanto riguarda il <strong>diritto internazionale pattizio</strong> (i trattati), l'adattamento avviene di solito attraverso una legge di autorizzazione alla ratifica e un ordine di esecuzione. Un ruolo cruciale è svolto dai <strong>trattati internazionali sui diritti umani</strong>, che, pur avendo un rango sub-costituzionale, fungono da "norme interposte" nel giudizio di legittimità costituzionale, ovvero parametri di costituzionalità per le leggi ordinarie, grazie all'Art. 117, comma 1, Cost. ("La potestà legislativa è esercitata dallo Stato e dalle Regioni nel rispetto della Costituzione, nonché dei vincoli derivanti dall'ordinamento comunitario e dagli obblighi internazionali"). Questa apertura all'ordinamento internazionale è un segno di modernità del nostro costituzionalismo, che riconosce la necessità di un'armonizzazione con le norme sovranazionali per la tutela dei diritti e la promozione della pace.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 38: Diritto dell'Unione Europea e Diritto Costituzionale -->
+            <section id="slide-38" class="section-card">
+                <h2 class="section-title">38. Diritto dell'Unione Europea e Diritto Costituzionale</h2>
+                <h3 class="section-subtitle">Il Dialogo tra Ordinamenti</h3>
+                <p class="section-text-summary">Il principio del primato del diritto dell'UE e del "contro-limite" costituzionale.</p>
+                <div class="section-focus">
+                    <p><strong>Il rapporto tra il diritto dell'Unione Europea e il diritto costituzionale italiano è uno dei capitoli più affascinanti e complessi del diritto pubblico contemporaneo. L'adesione dell'Italia all'UE ha implicato una "limitazione di sovranità" (Art. 11 Cost.) in favore di un'organizzazione sovranazionale, per scopi di pace e giustizia. Questo ha portato all'affermazione del <strong>principio del primato del diritto dell'UE</strong> sul diritto interno contrastante. La <strong>Corte di Giustizia dell'Unione Europea</strong> ha consolidato questo principio, affermando la preminenza delle norme europee direttamente applicabili rispetto alle leggi nazionali, anche successive. Tuttavia, la <strong>Corte Costituzionale italiana</strong> ha sviluppato la teoria dei <strong>"contro-limiti"</strong>, stabilendo che il primato del diritto UE non può spingere fino a violare i principi fondamentali e i diritti inviolabili della Costituzione italiana, che rappresentano un nucleo irrinunciabile della nostra identità costituzionale. Questo crea un costante <strong>dialogo tra le Corti</strong> (Corte Costituzionale italiana e Corte di Giustizia dell'UE), un confronto dinamico che arricchisce entrambi gli ordinamenti. Comprendere questa interazione è essenziale per afferrare la complessità del panorama giuridico attuale e le sfide che essa pone alla sovranità nazionale.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 39: La Laicità dello Stato -->
+            <section id="slide-39" class="section-card">
+                <h2 class="section-title">39. La Laicità dello Stato</h2>
+                <h3 class="section-subtitle">Separazione e Collaborazione</h3>
+                <p class="section-text-summary">Il principio di laicità come suprema garanzia di libertà religiosa e di coscienza.</p>
+                <div class="section-focus">
+                    <p><strong>La <strong>laicità dello Stato</strong> è uno dei principi supremi del nostro ordinamento costituzionale, sebbene non espressamente menzionato nel testo, ma ricavabile in via interpretativa dalla giurisprudenza della Corte Costituzionale (a partire dalla storica sentenza 203/1989). Essa non significa indifferenza dello Stato verso le confessioni religiose, né tantomeno ostilità, ma piuttosto <strong>separazione e collaborazione</strong>. Lo Stato laico riconosce e garantisce la libertà religiosa e di coscienza (Art. 19 Cost.) a tutti gli individui, senza distinzioni e senza favoritismi per alcuna confessione. Ciò implica la non confessionalità dello Stato, l'eguale libertà di tutte le confessioni religiose (Art. 8 Cost.), l'esclusione di privilegi per una in particolare e il principio di imparzialità dell'autorità statale. La laicità è una garanzia di pluralismo e tolleranza, essenziale per la convivenza in una società multiculturale e multireligiosa. Le sue applicazioni concrete sono spesso oggetto di dibattito, pensate al caso del crocifisso nelle aule scolastiche o alla gestione delle festività religiose. È un principio dinamico, che si adatta alle evoluzioni della società, mantenendo sempre la libertà di coscienza come suo fulcro.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 40: Il Principio di Uguaglianza -->
+            <section id="slide-40" class="section-card">
+                <h2 class="section-title">40. Il Principio di Uguaglianza</h2>
+                <h3 class="section-subtitle">Formale e Sostanziale</h3>
+                <p class="section-text-summary">Art. 3 Cost. come fondamento dell'ordinamento.</p>
+                <div class="section-focus">
+                    <p><strong>L'<strong>uguaglianza</strong> è un principio cardine della nostra Costituzione, enunciato nell'articolo 3 in due fondamentali accezioni. Il comma 1, l'<strong>uguaglianza formale</strong>, recita: "Tutti i cittadini hanno pari dignità sociale e sono eguali davanti alla legge, senza distinzione di sesso, di razza, di lingua, di religione, di opinioni politiche, di condizioni personali e sociali." Questo impone alla legge di trattare in modo uguale situazioni uguali e in modo diverso situazioni diverse, evitando discriminazioni arbitrarie. La Corte Costituzionale, in tal senso, ha sviluppato il principio di ragionevolezza: le differenze di trattamento devono essere motivate da giustificazioni oggettive. Ma la vera innovazione, e il cuore dello Stato sociale, è l'<strong>uguaglianza sostanziale</strong> (Art. 3, comma 2): "È compito della Repubblica rimuovere gli ostacoli di ordine economico e sociale, che, limitando di fatto la libertà e l'eguaglianza dei cittadini, impediscono il pieno sviluppo della persona umana e l'effettiva partecipazione di tutti i lavoratori all'organizzazione politica, economica e sociale del Paese." Questo non è un mero proclama, ma un imperativo per la Repubblica: lo Stato deve intervenire attivamente per rimuovere le disuguaglianze di fatto, promuovendo pari opportunità e inclusione. Pensiamo alle <strong>azioni positive</strong> per la parità di genere o per l'inclusione delle persone con disabilità. Il principio di uguaglianza è un motore di trasformazione sociale, che ci spinge a riflettere costantemente sulla giustizia e sull'equità del nostro ordinamento.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 41: Il Principio Lavorista -->
+            <section id="slide-41" class="section-card">
+                <h2 class="section-title">41. Il Principio Lavorista</h2>
+                <h3 class="section-subtitle">Il Lavoro come Fondamento della Repubblica</h3>
+                <p class="section-text-summary">L'Art. 1, comma 1, e gli Artt. 35 ss. Cost.</p>
+                <div class="section-focus">
+                    <p><strong>Il <strong>principio lavorista</strong> è uno degli aspetti più distintivi e profondi della Costituzione italiana. L'articolo 1, comma 1, afferma che "L'Italia è una Repubblica democratica, fondata sul lavoro." Questa non è una semplice asserzione, ma un'indicazione programmatica di valore etico e politico: il lavoro non è solo un mezzo di sostentamento, ma il fondamento della dignità umana, della partecipazione civica e della coesione sociale. Gli Artt. 35 ss. Cost. sviluppano ulteriormente questo principio, garantendo la tutela del lavoro in tutte le sue forme, la promozione e lo sviluppo professionale, il diritto a una retribuzione proporzionata alla quantità e qualità del lavoro e in ogni caso sufficiente ad assicurare al lavoratore e alla sua famiglia un'esistenza libera e dignitosa. Il principio lavorista ha guidato la legislazione in materia di diritto del lavoro e ha ispirato le politiche sociali del Paese. Tuttavia, le trasformazioni del mercato del lavoro (globalizzazione, precarizzazione, nuove forme di lavoro come la gig economy) pongono nuove sfide a questo principio. Suggerimento: Riflettiamo su come il principio lavorista possa essere riletto e attualizzato di fronte alle nuove realtà del mondo del lavoro. È ancora un principio in grado di guidare la protezione sociale nell'era digitale?</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 42: La Tutela dell'Ambiente -->
+            <section id="slide-42" class="section-card">
+                <h2 class="section-title">42. La Tutela dell'Ambiente</h2>
+                <h3 class="section-subtitle">Un Nuovo Diritto Fondamentale</h3>
+                <p class="section-text-summary">L'introduzione della tutela dell'ambiente nell'Art. 9 Cost.</p>
+                <div class="section-focus">
+                    <p><strong>Un'innovazione recente e di straordinaria importanza nella nostra Costituzione è stata l'introduzione della <strong>tutela dell'ambiente</strong> nell'articolo 9 (con l'aggiunta di un terzo comma) e nell'articolo 41 (con un secondo e terzo comma, sulla libertà d'impresa). La modifica, avvenuta nel 2022, ha elevato la tutela dell'ambiente, della biodiversità e degli ecosistemi a principio fondamentale della Repubblica, anche nell'interesse delle future generazioni. Inoltre, ha inserito la salute e l'ambiente tra i limiti dell'iniziativa economica privata, sottolineando che l'attività economica non può svolgersi in modo da recare danno alla salute, all'ambiente o alla sicurezza, alla libertà, alla dignità umana. Questa revisione costituzionale risponde a una consapevolezza crescente delle sfide globali legate al cambiamento climatico e alla sostenibilità, riconoscendo un <strong>diritto all'ambiente</strong> non solo come interesse collettivo, ma come dimensione fondamentale della persona. Le implicazioni di questa modifica sono profonde: essa rafforza la giustiziabilità del diritto all'ambiente, apre nuove prospettive per la giurisprudenza in materia di danno ambientale e impone al legislatore e all'amministrazione un'ottica di sostenibilità in ogni decisione. Sarà cruciale seguirne l'applicazione e l'impatto normativo.</strong></p>
+                    <div class="flex justify-center mt-6">
+                        <!-- Icona Albero -->
+                        <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-600">
+                            <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4ZM12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6ZM12 16C9.33333 16 7 17.3431 7 19H17C17 17.3431 14.6667 16 12 16Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 43: L'Equilibrio di Bilancio -->
+            <section id="slide-43" class="section-card">
+                <h2 class="section-title">43. L'Equilibrio di Bilancio</h2>
+                <h3 class="section-subtitle">Un Principio di Responsabilità Finanziaria</h3>
+                <p class="section-text-summary">L'inserimento dell'equilibrio di bilancio nell'Art. 81 Cost.</p>
+                <div class="section-focus">
+                    <p><strong>Nel 2012, in un contesto di grave crisi economica e finanziaria, l'articolo 81 della Costituzione è stato modificato per introdurre il <strong>principio dell'equilibrio di bilancio</strong>. Il nuovo comma 1 stabilisce che "Lo Stato assicura l'equilibrio tra le entrate e le spese del proprio bilancio, tenendo conto delle fasi avverse e delle fasi favorevoli del ciclo economico." Il comma 2 introduce la "sostenibilità del debito pubblico". Questa modifica, pur ispirata dalla necessità di responsabilità fiscale, ha generato un intenso dibattito sulla sua compatibilità con la natura di <strong>Stato sociale</strong> della Repubblica. Alcuni critici hanno paventato il rischio che il vincolo dell'equilibrio di bilancio possa limitare la capacità dello Stato di intervenire per attuare i diritti sociali o per affrontare emergenze. La formulazione "tenendo conto delle fasi avverse e delle fasi favorevoli del ciclo economico" introduce un elemento di flessibilità, suggerendo che l'equilibrio non debba essere rigido in ogni momento, ma debba essere valutato su un orizzonte pluriennale e adattarsi alle congiunture economiche. Questo principio ci impone di riflettere sul difficile bilanciamento tra rigore di bilancio e promozione del benessere sociale, un dilemma cruciale per il futuro del nostro welfare state.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 44: Emergenze Costituzionali -->
+            <section id="slide-44" class="section-card">
+                <h2 class="section-title">44. Emergenze Costituzionali</h2>
+                <h3 class="section-subtitle">Stato di Necessità e Limiti ai Diritti</h3>
+                <p class="section-text-summary">La gestione delle situazioni di emergenza (es. calamità naturali, pandemie) nel rispetto dei principi costituzionali.</p>
+                <div class="section-focus">
+                    <p><strong>Le <strong>emergenze costituzionali</strong>, come le calamità naturali, le crisi economiche o, come abbiamo recentemente sperimentato, le pandemie, mettono a dura prova la tenuta dell'ordinamento costituzionale. In queste situazioni, si rende spesso necessario adottare misure straordinarie che possono incidere, anche pesantemente, sui diritti e le libertà fondamentali dei cittadini. La Costituzione non prevede uno specifico "stato di emergenza" generale (come in altri ordinamenti), ma disciplina casi specifici (es. dichiarazione di guerra). Tuttavia, si è fatto ricorso a poteri straordinari attraverso l'uso di decreti-legge (Art. 77 Cost.) che, pur nati per casi di "straordinaria necessità e urgenza", sono stati impiegati per gestire situazioni prolungate. La sfida costituzionale in questi frangenti è duplice: da un lato, garantire l'efficacia delle misure adottate per fronteggiare l'emergenza; dall'altro, assicurare che tali misure siano proporzionate, temporanee e non ledano in modo irreversibile i diritti fondamentali, mantenendo intatto il nucleo essenziale dello Stato di diritto. Il bilanciamento tra sicurezza e libertà è un tema classico del diritto costituzionale, ma che le emergenze rendono drammaticamente attuale. Pensate ai dibattiti sui limiti alla libertà di circolazione o di riunione durante la pandemia da COVID-19: fino a che punto lo Stato può limitare le libertà individuali in nome della salute pubblica?</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 45: Diritto Costituzionale Comparato -->
+            <section id="slide-45" class="section-card">
+                <h2 class="section-title">45. Diritto Costituzionale Comparato</h2>
+                <h3 class="section-subtitle">Imparare dalle Esperienze Altre</h3>
+                <p class="section-text-summary">L'importanza dello studio comparato delle Costituzioni.</p>
+                <div class="section-focus">
+                    <p><strong>Lo studio del <strong>diritto costituzionale comparato</strong> è indispensabile per ogni giurista avanzato. Non si tratta solo di conoscere le Costituzioni di altri Paesi, ma di comprendere le logiche profonde che le animano, le soluzioni che hanno adottato per problemi simili ai nostri e le ragioni storiche e culturali che le hanno plasmate. Comparare ci permette di relativizzare le nostre soluzioni interne, di comprendere meglio i punti di forza e di debolezza del nostro sistema e di trarre ispirazione da esperienze diverse. Ad esempio, confrontare la nostra forma di governo parlamentare con il presidenzialismo americano o il semipresidenzialismo francese ci aiuta a cogliere le diverse filosofie di bilanciamento dei poteri. Analizzare le carte dei diritti di altri ordinamenti ci permette di apprezzare la specificità dei nostri diritti fondamentali e di individuare tendenze comuni o divergenze significative. Questo approccio è cruciale in un'epoca di crescente interdipendenza globale, dove le soluzioni giuridiche non possono più essere pensate in isolamento, ma devono confrontarsi con un contesto internazionale sempre più interconnesso.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 46: Giustizia Costituzionale Comparata -->
+            <section id="slide-46" class="section-card">
+                <h2 class="section-title">46. Giustizia Costituzionale Comparata</h2>
+                <h3 class="section-subtitle">Corti e Modelli di Controllo</h3>
+                <p class="section-text-summary">I diversi modelli di giustizia costituzionale (accentrato, diffuso, misto).</p>
+                <div class="section-focus">
+                    <p><strong>In stretta connessione con il diritto costituzionale comparato, vi è la <strong>giustizia costituzionale comparata</strong>. Questo campo di studio analizza i diversi modelli attraverso i quali le Costituzioni sono garantite e interpretate dalle corti supreme o costituzionali. Abbiamo visto il modello italiano, di <strong>controllo accentrato</strong> (modello Kelseniano), dove solo la Corte Costituzionale ha il potere di annullare una legge incostituzionale, sebbene l'accesso avvenga in via incidentale (attraverso il giudice a quo). Negli Stati Uniti, invece, prevale il modello di <strong>controllo diffuso</strong> (modello Marbury v. Madison), dove ogni giudice ha il potere di non applicare una legge che ritenga incostituzionale, senza annullarla, ma disapplicandola solo nel caso concreto. Esistono poi modelli <strong>misti</strong> o sistemi più complessi. Comprendere queste differenze ci aiuta a capire come la tutela dei diritti e la supremazia della Costituzione siano realizzate in modi diversi, ciascuno con i propri vantaggi e svantaggi. Il <strong>dialogo tra le Corti Costituzionali</strong> a livello internazionale e sovranazionale è un fenomeno crescente, che arricchisce la giurisprudenza e contribuisce alla costruzione di un "diritto pubblico globale".</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 47: Prospettive Future -->
+            <section id="slide-47" class="section-card">
+                <h2 class="section-title">47. Prospettive Future</h2>
+                <h3 class="section-subtitle">Sfide e Adattamenti</h3>
+                <p class="section-text-summary">Globalizzazione, digitalizzazione, crisi ambientali, intelligenza artificiale.</p>
+                <div class="section-focus">
+                    <p><strong>Il diritto costituzionale non è una disciplina statica, ma un campo in costante evoluzione, chiamato ad affrontare le <strong>sfide del XXI secolo</strong>. La <strong>globalizzazione</strong> e l'emergere di attori non statali mettono in discussione la sovranità tradizionale. La <strong>digitalizzazione</strong> e l'avvento delle nuove tecnologie (internet, social media, intelligenza artificiale) pongono interrogativi inediti sulla tutela dei diritti fondamentali (privacy, libertà di espressione, diritto all'oblio) e sulla regolamentazione dei poteri digitali. Le <strong>crisi ambientali</strong> impongono una riconsiderazione del rapporto tra uomo e natura e del ruolo dello Stato nella tutela degli ecosistemi. L'<strong>intelligenza artificiale</strong>, in particolare, solleva questioni etiche e giuridiche senza precedenti: chi è responsabile per le decisioni algoritmiche? Come garantire la non discriminazione e la trasparenza? Il diritto costituzionale è chiamato a dare risposte a queste sfide, non rinnegando i suoi principi fondanti, ma adattandoli a un contesto in rapida mutazione. È un compito arduo, che richiede non solo competenze giuridiche, ma anche una profonda comprensione dei fenomeni sociali, economici e tecnologici.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 48: Costituzione e Nuove Tecnologie -->
+            <section id="slide-48" class="section-card">
+                <h2 class="section-title">48. Costituzione e Nuove Tecnologie</h2>
+                <h3 class="section-subtitle">Diritti Digitali e Sfide Etiche</h3>
+                <p class="section-text-summary">La tutela della privacy, il diritto all'oblio, la regolamentazione dell'intelligenza artificiale.</p>
+                <div class="section-focus">
+                    <p><strong>Entrando più nel dettaglio delle nuove tecnologie, il rapporto tra <strong>Costituzione e diritti digitali</strong> è un tema emergente di fondamentale importanza. Il diritto alla <strong>privacy</strong> nell'era digitale, pur non essendo esplicitamente menzionato nella Costituzione, viene desunto da principi come la libertà personale e la dignità umana, ed è rafforzato da normative europee come il GDPR. Il <strong>diritto all'oblio</strong>, ovvero la possibilità di ottenere la deindicizzazione di informazioni obsolete o non più pertinenti, è un'altra sfida per la libertà di informazione e la protezione dei dati. Ma la frontiera più avanzata è la <strong>regolamentazione dell'intelligenza artificiale (IA)</strong>. L'IA pone problemi etici e giuridici complessi: dalla discriminazione algoritmica alla responsabilità per i danni causati da sistemi autonomi, dalla protezione del copyright nell'ambito delle creazioni IA alla necessità di garantire la trasparenza e la controllabilità degli algoritmi. Alcuni studiosi propongono l'introduzione di nuovi "diritti digitali" in Costituzione per far fronte a queste sfide. Questo dibattito ci porta a interrogarci: la nostra Costituzione, pur nata in un'era analogica, è sufficientemente elastica per inglobare e proteggere i diritti della "società digitale"? O abbiamo bisogno di un vero e proprio "costituzionalismo digitale" che adatti i principi fondanti al nuovo paradigma tecnologico?</strong></p>
+                    <div class="flex justify-center mt-6">
+                        <!-- Icona Robot AI -->
+                        <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-600">
+                            <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4ZM12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6ZM12 16C9.33333 16 7 17.3431 7 19H17C17 17.3431 14.6667 16 12 16Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 49: La Costituzione "Vivente" -->
+            <section id="slide-49" class="section-card">
+                <h2 class="section-title">49. La Costituzione "Vivente"</h2>
+                <h3 class="section-subtitle">Interpretazione e Applicazione</h3>
+                <p class="section-text-summary">La Costituzione come testo dinamico, interpretato ed applicato alla luce del contesto sociale ed economico.</p>
+                <div class="section-focus">
+                    <p><strong>La nostra Costituzione non è un mero documento storico, ma una <strong>Costituzione "vivente"</strong>. Questo significa che, pur essendo un testo stabile e rigido, la sua interpretazione e applicazione evolvono nel tempo per adattarsi ai mutamenti sociali, culturali ed economici. Il testo costituzionale è spesso formulato con clausole ampie e principi generali, che consentono alla giurisprudenza (in particolare della Corte Costituzionale) e alla dottrina di attribuire significati nuovi alle norme, pur rimanendo fedeli allo spirito originario. Questo dinamismo interpretativo è ciò che permette alla Costituzione di rimanere attuale e di continuare a fornire risposte a problemi che i Padri Costituenti non potevano prevedere. Pensate all'evoluzione dell'interpretazione del principio di uguaglianza, che da formale è diventato sostanziale, o alla sempre maggiore attenzione alla tutela dell'ambiente anche prima della recente modifica. La Costituzione è un "cantiere aperto", un processo continuo di comprensione e attuazione, in cui il ruolo del giurista non è solo di leggere le norme, ma di interrogarle e di dare loro un significato che sia rilevante per il tempo presente, senza tradirne i valori fondanti.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 50: Ruolo dello Studioso di Diritto Costituzionale -->
+            <section id="slide-50" class="section-card">
+                <h2 class="section-title">50. Ruolo dello Studioso di Diritto Costituzionale</h2>
+                <h3 class="section-subtitle">Non Solo Norme, Ma Valori</h3>
+                <p class="section-text-summary">L'importanza di un approccio critico e multidisciplinare.</p>
+                <div class="section-focus">
+                    <p><strong>Il ruolo dello studioso di diritto costituzionale, e di voi futuri giuristi, non si esaurisce nell'apprendimento mnemonico degli articoli della Costituzione. È un ruolo molto più ambizioso e, oserei dire, affascinante. Richiede un <strong>approccio critico e multidisciplinare</strong>. Dobbiamo essere in grado di analizzare le norme non solo nel loro significato letterale, ma anche nella loro interazione con la storia, la politica, la società, l'economia e persino la filosofia. Il diritto costituzionale ci invita a guardare oltre il dato normativo, a indagare i valori che lo ispirano, le forze che lo modellano e le sfide che deve affrontare. È una disciplina che forma il senso critico, la capacità di argomentazione e la consapevolezza civica. Il giurista costituzionalista è chiamato a essere non solo un tecnico del diritto, ma un interprete dei principi fondamentali che reggono la convivenza civile, un custode dei diritti e un promotore della giustizia. È un mestiere che richiede costante aggiornamento, apertura mentale e un profondo senso di responsabilità verso le istituzioni e la comunità.</strong></p>
+                </div>
+            </section>
+
+            <!-- Slide 51: Conclusioni e Dibattito -->
+            <section id="slide-51" class="section-card">
+                <h2 class="section-title">51. Conclusioni e Dibattito</h2>
+                <h3 class="section-subtitle">Il Diritto Costituzionale: Una Materia Sempre Viva</h3>
+                <p class="section-text-summary">Riflessioni finali e apertura al dibattito.</p>
+                <div class="section-focus">
+                    <p><strong>Siamo giunti al termine di questo percorso. Spero che abbiate percepito come il diritto costituzionale sia una materia "viva", pulsante, che tocca le corde più profonde della nostra convivenza civile. Non è un insieme di regole astratte, ma lo specchio dei nostri valori, delle nostre aspirazioni, e delle nostre sfide. Essa è in perenne dialogo con la società, in un processo di adattamento e di crescita. Ora, prima di chiudere, vorrei che questa lezione diventasse un momento di confronto. Quali sono, secondo voi, le <strong>prossime grandi sfide</strong> che la Costituzione italiana e, più in generale, il costituzionalismo europeo e globale dovranno affrontare? Quali principi ritenete più a rischio o che necessiterebbero di maggiore attenzione? E in che modo il vostro ruolo di futuri giuristi potrà contribuire a mantenere viva e attuale la nostra Carta fondamentale? Sono aperto a tutte le vostre domande e riflessioni. Il dibattito è il cuore della democrazia e, in fondo, anche il modo migliore per approfondire il diritto costituzionale.</strong></p>
+                </div>
+            </section>
+
+            <!-- Quiz Section -->
+            <section id="quiz-section" class="quiz-container">
+                <h2 class="section-title">Quiz di Verifica</h2>
+                <h3 class="section-subtitle">Metti alla prova le tue conoscenze!</h3>
+
+                <div id="quiz-start-screen" class="text-center">
+                    <button id="start-quiz-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 ease-in-out shadow-md">
+                        Inizia il Quiz
+                    </button>
+                </div>
+
+                <div id="quiz-active-screen" class="hidden">
+                    <div class="quiz-question" id="quiz-question-text"></div>
+                    <div class="quiz-options" id="quiz-options-container"></div>
+                    <div class="quiz-navigation flex justify-between mt-6">
+                        <button id="prev-question-btn" class="bg-gray-400 hover:bg-gray-500 text-white" disabled>Precedente</button>
+                        <button id="next-question-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white">Successiva</button>
+                    </div>
+                    <div class="flex justify-center mt-4">
+                        <button id="check-answers-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out shadow-md">
+                            Verifica Risposte Date
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quiz-review-screen" class="hidden">
+                    <h4 class="text-2xl font-bold text-indigo-700 mb-4 text-center">Riepilogo delle Risposte Date</h4>
+                    <div id="review-questions-container">
+                        <!-- Answered questions will be rendered here -->
+                    </div>
+                    <div class="flex justify-center mt-6">
+                        <button id="restart-quiz-btn-review" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out shadow-md">
+                            Ricomincia Quiz
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quiz-result-screen" class="hidden text-center mt-8">
+                    <h4 class="text-2xl font-bold text-indigo-700 mb-4">Risultato Finale del Quiz</h4>
+                    <p id="quiz-score" class="text-xl font-semibold text-gray-800 mb-6"></p>
+                    <div class="flex justify-center space-x-4">
+                        <button id="review-all-answers-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out shadow-md">
+                            Rivedi Tutte le Risposte
+                        </button>
+                        <button id="restart-quiz-btn-final" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out shadow-md">
+                            Ricomincia Quiz
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="mt-8">
+            <p>&copy; 2025 Corso di Diritto Costituzionale. Tutti i diritti riservati. Materiale didattico a scopo illustrativo.</p>
+        </footer>
+    </main>
+
+    <script>
+        // Sidebar Toggle Functionality
+        const sidebar = document.getElementById('sidebar');
+        const mainContentWrapper = document.getElementById('main-content-wrapper');
+        const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+
+        // Initial state for desktop: sidebar visible, content shifted
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('hidden');
+            mainContentWrapper.classList.remove('full-width');
+        } else {
+            // Initial state for mobile: sidebar hidden, content full width
+            sidebar.classList.add('hidden');
+            mainContentWrapper.classList.add('full-width');
+        }
+
+        sidebarToggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('visible'); // For mobile specific control
+            mainContentWrapper.classList.toggle('full-width');
+            if (sidebar.classList.contains('hidden')) {
+                sidebarToggleBtn.innerHTML = '☰ Mostra Indice';
+            } else {
+                sidebarToggleBtn.innerHTML = '✖ Nascondi Indice';
+            }
+        });
+
+        // Close sidebar on link click for mobile
+        sidebar.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.add('hidden');
+                    sidebar.classList.remove('visible');
+                    mainContentWrapper.classList.add('full-width');
+                    sidebarToggleBtn.innerHTML = '☰ Mostra Indice';
+                }
+            });
+        });
+
+        // Quiz Functionality
+        const quizData = [
+            {
+                question: "Qual è il principio fondamentale che caratterizza la Costituzione italiana riguardo alla sua modificabilità?",
+                options: ["Flessibilità", "Rigidità", "Elasticità", "Malleabilità"],
+                correct: 1
+            },
+            {
+                question: "Quale articolo della Costituzione italiana afferma che 'La sovranità appartiene al popolo, che la esercita nelle forme e nei limiti della Costituzione'?",
+                options: ["Art. 1", "Art. 2", "Art. 3", "Art. 13"],
+                correct: 0
+            },
+            {
+                question: "Quale organo è il 'custode della Costituzione' in Italia?",
+                options: ["Il Parlamento", "Il Governo", "La Magistratura Ordinaria", "La Corte Costituzionale"],
+                correct: 3
+            },
+            {
+                question: "Quale principio è stato introdotto nell'Art. 81 della Costituzione nel 2012?",
+                options: ["Il principio lavorista", "Il principio di laicità", "Il principio dell'equilibrio di bilancio", "Il principio di sussidiarietà"],
+                correct: 2
+            },
+            {
+                question: "La Costituzione italiana è un esempio di quale forma di governo?",
+                options: ["Presidenziale", "Semipresidenziale", "Parlamentare", "Direttoriale"],
+                correct: 2
+            },
+            {
+                question: "La rigidità della Costituzione italiana è garantita principalmente da:",
+                options: ["Un referendum ordinario", "Un procedimento di revisione aggravato", "Una legge ordinaria", "La volontà del Governo"],
+                correct: 1
+            },
+            {
+                question: "Quali sono i tre elementi costitutivi dello Stato?",
+                options: ["Governo, Leggi, Cittadini", "Popolo, Territorio, Sovranità", "Parlamento, Magistratura, Presidente", "Economia, Cultura, Società"],
+                correct: 1
+            },
+            {
+                question: "Lo Stato sociale si distingue dallo Stato liberale per:",
+                options: ["L'assenza di diritti di libertà", "Un maggiore intervento statale per rimuovere le disuguaglianze", "Un suffragio limitato", "La concentrazione dei poteri"],
+                correct: 1
+            },
+            {
+                question: "Nel sistema parlamentare italiano, il Governo deve ottenere la fiducia di:",
+                options: ["Solo la Camera dei Deputati", "Solo il Senato della Repubblica", "Entrambe le Camere", "Nessuna delle Camere"],
+                correct: 2
+            },
+            {
+                question: "Il divieto di mandato imperativo per i membri del Parlamento significa che:",
+                options: ["Possono votare solo secondo le direttive del loro partito", "Rappresentano la Nazione e non sono vincolati da istruzioni", "Devono obbedire agli ordini del Governo", "Non possono essere sfiduciati"],
+                correct: 1
+            },
+            {
+                question: "Quale tra questi non è uno strumento di democrazia diretta previsto dalla Costituzione italiana?",
+                options: ["Referendum abrogativo", "Iniziativa legislativa popolare", "Voto di sfiducia al Governo", "Petizione"],
+                correct: 2
+            },
+            {
+                question: "L'articolo 2 della Costituzione italiana tutela i diritti:",
+                options: ["Solo dei cittadini italiani", "Solo dei lavoratori", "Inviolabili dell'uomo", "Solo quelli espressamente elencati"],
+                correct: 2
+            },
+            {
+                question: "La libertà personale (Art. 13 Cost.) è limitabile solo per:",
+                options: ["Ordine del Governo", "Atto motivato dell'autorità giudiziaria nei casi e modi previsti dalla legge", "Decisione della maggioranza parlamentare", "Esigenze di ordine pubblico senza limiti"],
+                correct: 1
+            },
+            {
+                question: "Quale limite esplicito è posto alla libertà di manifestazione del pensiero (Art. 21 Cost.)?",
+                options: ["La critica politica", "Le pubblicazioni contrarie al buon costume", "La satira", "Le opinioni dissenzienti"],
+                correct: 1
+            },
+            {
+                question: "I diritti sociali richiedono allo Stato:",
+                options: ["Di astenersi dall'intervenire", "Prestazioni positive per la loro attuazione", "Solo la garanzia della libertà economica", "La non interferenza nella vita privata"],
+                correct: 1
+            },
+            {
+                question: "Il dovere tributario (Art. 53 Cost.) è basato sul principio di:",
+                options: ["Uniformità", "Progressività", "Proporzionalità fissa", "Volontarietà"],
+                correct: 1
+            },
+            {
+                question: "Il bicameralismo italiano è definito:",
+                options: ["Imperfetto", "Monocamerale", "Perfetto o paritario", "Asimmetrico"],
+                correct: 2
+            },
+            {
+                question: "Quale atto normativo non è di competenza esclusiva del Parlamento?",
+                options: ["Legge ordinaria", "Legge costituzionale", "Decreto-legge", "Legge di bilancio"],
+                correct: 2
+            },
+            {
+                question: "Il Presidente del Consiglio dei Ministri è:",
+                options: ["Eletto direttamente dal popolo", "Nominato dal Presidente della Repubblica", "Nominato dal Parlamento", "Il capo dello Stato"],
+                correct: 1
+            },
+            {
+                question: "I decreti-legge devono essere convertiti in legge dal Parlamento entro:",
+                options: ["30 giorni", "60 giorni", "90 giorni", "120 giorni"],
+                correct: 1
+            },
+            {
+                question: "Il Presidente della Repubblica è eletto da:",
+                options: ["Il popolo", "Il Parlamento in seduta comune e delegati regionali", "Il Governo", "La Corte Costituzionale"],
+                correct: 1
+            },
+            {
+                question: "Qual è una funzione di garanzia del Presidente della Repubblica?",
+                options: ["Dirigere la politica estera", "Nominare i ministri", "Promulgare le leggi", "Rinvio delle leggi al Parlamento"],
+                correct: 3
+            },
+            {
+                question: "La Magistratura è un ordine:",
+                options: ["Dipendente dal Governo", "Dipendente dal Parlamento", "Autonomo e indipendente", "Soggetto al Presidente della Repubblica"],
+                correct: 2
+            },
+            {
+                question: "Il CSM è l'organo di:",
+                options: ["Controllo sul Governo", "Autogoverno della Magistratura", "Revisione costituzionale", "Giudizio di legittimità"],
+                correct: 1
+            },
+            {
+                question: "La Corte Costituzionale giudica sulla legittimità costituzionale delle leggi attraverso:",
+                options: ["Solo la via principale", "Solo la via incidentale", "Sia la via incidentale che quella principale", "Un referendum"],
+                correct: 2
+            },
+            {
+                question: "Il principio di sussidiarietà (Art. 118 Cost.) prevede che le funzioni amministrative siano attribuite:",
+                options: ["Esclusivamente allo Stato", "All'ente territoriale più vicino ai cittadini", "Esclusivamente alle Regioni", "Solo alle Città Metropolitane"],
+                correct: 1
+            },
+            {
+                question: "Le Regioni a statuto speciale godono di autonomia:",
+                options: ["Ordinaria", "Differenziata", "Particolare, stabilita da leggi costituzionali", "Limitata dal Governo"],
+                correct: 2
+            },
+            {
+                question: "Il limite alla revisione costituzionale (Art. 139 Cost.) riguarda:",
+                options: ["La forma di governo", "La forma repubblicana", "I diritti sociali", "Il principio lavorista"],
+                correct: 1
+            },
+            {
+                question: "L'articolo 10, comma 1, della Costituzione italiana riguarda:",
+                options: ["L'adattamento al diritto dell'Unione Europea", "L'adattamento alle norme del diritto internazionale generalmente riconosciute", "La sovranità popolare", "La libertà di espressione"],
+                correct: 1
+            },
+            {
+                question: "La teoria dei 'contro-limiti' della Corte Costituzionale italiana si riferisce a:",
+                options: ["Limiti al potere del Parlamento", "Limiti al potere del Governo", "Limiti al primato del diritto UE per la tutela dei principi fondamentali", "Limiti alla libertà di associazione"],
+                correct: 2
+            },
+            {
+                question: "La laicità dello Stato implica:",
+                options: ["L'ostilità verso ogni religione", "L'indifferenza verso le confessioni religiose", "La non confessionalità dello Stato e l'eguale libertà di tutte le confessioni", "La supremazia di una religione sulle altre"],
+                correct: 2
+            },
+            {
+                question: "L'uguaglianza sostanziale (Art. 3, comma 2, Cost.) impone alla Repubblica di:",
+                options: ["Trattare tutti i cittadini allo stesso modo", "Rimuovere gli ostacoli che limitano la libertà e l'eguaglianza", "Garantire solo l'uguaglianza formale", "Non intervenire nelle questioni sociali"],
+                correct: 1
+            },
+            {
+                question: "Il principio lavorista (Art. 1 Cost.) considera il lavoro come:",
+                options: ["Solo un mezzo di sostentamento", "Il fondamento della Repubblica democratica", "Un dovere senza diritti", "Un'attività economica senza valenza sociale"],
+                correct: 1
+            },
+            {
+                question: "La recente modifica all'Art. 9 della Costituzione ha introdotto la tutela di:",
+                options: ["La proprietà privata", "L'equilibrio di bilancio", "L'ambiente, la biodiversità e gli ecosistemi", "La libertà d'impresa senza limiti"],
+                correct: 2
+            },
+            {
+                question: "Le emergenze costituzionali pongono il problema del bilanciamento tra:",
+                options: ["Potere legislativo e potere esecutivo", "Sovranità interna e sovranità esterna", "Esigenze di sicurezza e tutela delle libertà fondamentali", "Democrazia rappresentativa e democrazia diretta"],
+                correct: 2
+            }
+        ];
+
+        let userAnswers = [];
+        let score = 0;
+        let currentQuestionIndex = 0;
+
+        const quizStartScreen = document.getElementById('quiz-start-screen');
+        const quizActiveScreen = document.getElementById('quiz-active-screen');
+        const quizResultScreen = document.getElementById('quiz-result-screen');
+        const quizReviewScreen = document.getElementById('quiz-review-screen'); // New review screen
+        const reviewQuestionsContainer = document.getElementById('review-questions-container'); // Container for reviewed questions
+
+        const startQuizBtn = document.getElementById('start-quiz-btn');
+        const quizQuestionText = document.getElementById('quiz-question-text');
+        const quizOptionsContainer = document.getElementById('quiz-options-container');
+        const prevQuestionBtn = document.getElementById('prev-question-btn');
+        const nextQuestionBtn = document.getElementById('next-question-btn');
+        const checkAnswersBtn = document.getElementById('check-answers-btn'); // New button
+        const quizScoreDisplay = document.getElementById('quiz-score');
+        const reviewAllAnswersBtn = document.getElementById('review-all-answers-btn'); // Renamed for clarity
+        const restartQuizBtnFinal = document.getElementById('restart-quiz-btn-final');
+        const restartQuizBtnReview = document.getElementById('restart-quiz-btn-review'); // New button for review screen
+
+        function startQuiz() {
+            userAnswers = Array(quizData.length).fill(null);
+            score = 0;
+            currentQuestionIndex = 0;
+            quizStartScreen.classList.add('hidden');
+            quizResultScreen.classList.add('hidden');
+            quizReviewScreen.classList.add('hidden'); // Hide review screen
+            quizActiveScreen.classList.remove('hidden');
+            renderSingleQuestion(currentQuestionIndex);
+            updateNavigationButtons();
+            enableQuizInputs();
+        }
+
+        function renderSingleQuestion(index) {
+            const question = quizData[index];
+            quizQuestionText.textContent = `${index + 1}. ${question.question}`;
+            quizOptionsContainer.innerHTML = '';
+
+            question.options.forEach((option, i) => {
+                const label = document.createElement('label');
+                label.className = 'block p-3 bg-f0f4ff rounded-lg mb-2 cursor-pointer transition duration-200 ease-in-out hover:bg-e0e7ff transform hover:-translate-y-0.5';
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `question-${index}`;
+                radio.value = i;
+                radio.className = 'mr-3 accent-indigo-600';
+                radio.addEventListener('change', (event) => {
+                    userAnswers[index] = parseInt(event.target.value);
+                    updateNavigationButtons();
+                });
+
+                if (userAnswers[index] === i) {
+                    radio.checked = true;
+                }
+
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(option));
+                quizOptionsContainer.appendChild(label);
+            });
+        }
+
+        function updateNavigationButtons() {
+            prevQuestionBtn.disabled = currentQuestionIndex === 0;
+            nextQuestionBtn.disabled = userAnswers[currentQuestionIndex] === null; // Can't go next if current question not answered
+
+            if (currentQuestionIndex === quizData.length - 1 && userAnswers[currentQuestionIndex] !== null) {
+                nextQuestionBtn.textContent = 'Termina Quiz';
+                nextQuestionBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                nextQuestionBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+            } else {
+                nextQuestionBtn.textContent = 'Successiva';
+                nextQuestionBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                nextQuestionBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+            }
+        }
+
+        function navigateQuiz(direction) {
+            if (direction === 'prev') {
+                currentQuestionIndex--;
+            } else { // 'next'
+                if (currentQuestionIndex === quizData.length - 1) {
+                    endQuiz();
+                    return;
+                }
+                currentQuestionIndex++;
+            }
+            renderSingleQuestion(currentQuestionIndex);
+            updateNavigationButtons();
+        }
+
+        function endQuiz() {
+            score = 0;
+            for (let i = 0; i < quizData.length; i++) {
+                if (userAnswers[i] === quizData[i].correct) {
+                    score++;
+                }
+            }
+            quizActiveScreen.classList.add('hidden');
+            quizReviewScreen.classList.add('hidden'); // Hide review screen
+            quizResultScreen.classList.remove('hidden');
+            quizScoreDisplay.textContent = `Hai risposto correttamente a ${score} domande su ${quizData.length}.`;
+            disableQuizInputs(); // Disable inputs on active screen (not strictly necessary as it's hidden)
+        }
+
+        function reviewAnsweredQuestions() {
+            quizActiveScreen.classList.add('hidden');
+            quizResultScreen.classList.add('hidden');
+            quizReviewScreen.classList.remove('hidden');
+            reviewQuestionsContainer.innerHTML = ''; // Clear previous review content
+
+            let answeredCount = 0;
+            quizData.forEach((question, qIndex) => {
+                if (userAnswers[qIndex] !== null) { // Only show answered questions
+                    answeredCount++;
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'section-card mb-4 p-4'; // Use section-card style for review questions
+                    
+                    const questionText = document.createElement('p');
+                    questionText.className = 'quiz-question text-lg font-semibold text-indigo-700 mb-3';
+                    questionText.textContent = `${qIndex + 1}. ${question.question}`;
+                    questionDiv.appendChild(questionText);
+
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.className = 'quiz-options';
+
+                    question.options.forEach((option, oIndex) => {
+                        const label = document.createElement('label');
+                        label.className = 'block p-2 rounded-lg mb-1';
+                        label.textContent = option;
+
+                        if (oIndex === question.correct) {
+                            label.classList.add('correct');
+                        } else if (userAnswers[qIndex] === oIndex) { // If it was the user's answer
+                            label.classList.add('incorrect');
+                        } else {
+                            label.classList.add('bg-f0f4ff');
+                        }
+                        optionsDiv.appendChild(label);
+                    });
+                    questionDiv.appendChild(optionsDiv);
+                    reviewQuestionsContainer.appendChild(questionDiv);
+                }
+            });
+
+            if (answeredCount === 0) {
+                reviewQuestionsContainer.innerHTML = '<p class="text-center text-gray-600">Non hai ancora risposto a nessuna domanda.</p>';
+            }
+        }
+
+        function reviewAllAnswers() {
+            quizResultScreen.classList.add('hidden');
+            quizActiveScreen.classList.add('hidden');
+            quizReviewScreen.classList.remove('hidden');
+            reviewQuestionsContainer.innerHTML = ''; // Clear previous review content
+
+            quizData.forEach((question, qIndex) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'section-card mb-4 p-4';
+                
+                const questionText = document.createElement('p');
+                questionText.className = 'quiz-question text-lg font-semibold text-indigo-700 mb-3';
+                questionText.textContent = `${qIndex + 1}. ${question.question}`;
+                questionDiv.appendChild(questionText);
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'quiz-options';
+
+                question.options.forEach((option, oIndex) => {
+                    const label = document.createElement('label');
+                    label.className = 'block p-2 rounded-lg mb-1';
+                    label.textContent = option;
+
+                    if (oIndex === question.correct) {
+                        label.classList.add('correct');
+                    } else if (userAnswers[qIndex] === oIndex && userAnswers[qIndex] !== question.correct) {
+                        label.classList.add('incorrect');
+                    } else {
+                        label.classList.add('bg-f0f4ff');
+                    }
+                    optionsDiv.appendChild(label);
+                });
+                questionDiv.appendChild(optionsDiv);
+                reviewQuestionsContainer.appendChild(questionDiv);
+            });
+        }
+
+        function restartQuiz() {
+            quizStartScreen.classList.remove('hidden');
+            quizActiveScreen.classList.add('hidden');
+            quizResultScreen.classList.add('hidden');
+            quizReviewScreen.classList.add('hidden'); // Hide review screen
+            // Re-initialize everything
+            userAnswers = [];
+            score = 0;
+            currentQuestionIndex = 0;
+        }
+
+        function disableQuizInputs() {
+            quizOptionsContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = true;
+            });
+            prevQuestionBtn.disabled = true;
+            nextQuestionBtn.disabled = true;
+            checkAnswersBtn.disabled = true; // Disable check answers button too
+        }
+
+        function enableQuizInputs() {
+            quizOptionsContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = false;
+            });
+            updateNavigationButtons();
+            checkAnswersBtn.disabled = false;
+        }
+
+        startQuizBtn.addEventListener('click', startQuiz);
+        prevQuestionBtn.addEventListener('click', () => navigateQuiz('prev'));
+        nextQuestionBtn.addEventListener('click', () => navigateQuiz('next'));
+        checkAnswersBtn.addEventListener('click', reviewAnsweredQuestions); // Event listener for new button
+        reviewAllAnswersBtn.addEventListener('click', reviewAllAnswers);
+        restartQuizBtnFinal.addEventListener('click', restartQuiz);
+        restartQuizBtnReview.addEventListener('click', restartQuiz); // Event listener for restart from review screen
+    </script>
+</body>
+</html>
